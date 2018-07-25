@@ -46,6 +46,8 @@
             android:name=".CheckInActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
+        <activity android:name=".recyclerViewItem"></activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
