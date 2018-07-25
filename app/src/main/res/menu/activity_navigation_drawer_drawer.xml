@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+    <item android:id="@+id/account"
+        android:title="Account" >
+        <menu>
+            <item android:id="@+id/foto"
+                android:title="Foto"
+                android:icon="@drawable/ic_menu_camera"/>
+            <item android:id="@+id/password"
+                android:title="Password"
+                android:icon="@drawable/ic_password"/>
+        </menu>
+    </item>
+
+    <item android:id="@+id/settings"
+        android:title="Settings">
+
+        <menu>
+            <item android:id="@+id/bahasa"
+                android:title="Bahasa"
+                android:icon="@drawable/ic_language"/>
+            <item
+                android:id="@+id/umur_data"
+                android:title="Umur data"
+                android:icon="@drawable/ic_data"/>
+        </menu>
+    </item>
+
+    <item
+        android:title="Logout"
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_logout" />
+
+    <item
+        android:title="About"
+        android:id="@+id/about"
+        android:icon="@drawable/ic_about" />
+
+
+</menu>

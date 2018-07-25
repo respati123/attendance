@@ -1,0 +1,79 @@
+package com.example.acer.attandance_free_feature.db.models;
+
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
+
+
+import com.example.acer.attandance_free_feature.db.dao.UsersDao;
+import com.example.acer.attandance_free_feature.db.entities.Absensi;
+import com.example.acer.attandance_free_feature.db.entities.Users;
+import com.example.acer.attandance_free_feature.db.repositories.AbsensiRepository;
+import com.example.acer.attandance_free_feature.db.repositories.UserRepository;
+import com.example.acer.attandance_free_feature.db.repositories.WordRepository;
+import com.example.acer.attandance_free_feature.db.entities.Words;
+
+import java.util.List;
+
+public class WordViewModel extends AndroidViewModel {
+    private WordRepository wr;
+    private UserRepository ur;
+    private AbsensiRepository ar;
+
+    private LiveData<List<Words>> wordList;
+    private LiveData<List<Users>> userList;
+    private LiveData<List<Absensi>> absensiList;
+
+    public WordViewModel(Application app){
+        super(app);
+        wr = new WordRepository(app);
+        wordList = wr.getAllWords();
+
+        ur = new UserRepository(app);
+        userList = ur.getmGetAllUser();
+
+        ar = new AbsensiRepository(app);
+        absensiList = ar.getmGetAllAbsensi();
+
+
+    }
+
+    //absensi
+
+
+    public LiveData<List<Absensi>> getAbsensiList() {
+        return absensiList;
+    }
+
+    public void insert(Absensi absensi){
+        ar.insert(absensi);
+    }
+
+    //users
+    public LiveData<List<Users>> getUserList() {
+        return userList;
+    }
+
+    public void insert(Users users){
+        ur.insert(users);
+    }
+
+    public void updateData(Users users){
+        ur.update(users);
+    }
+
+    public void getUsers(){
+        ur.getUsers();
+    }
+
+
+    //word
+
+    public LiveData<List<Words>> getAllWords(){
+        return wordList;
+    }
+
+    public void insert(Words word){
+        wr.insertWord(word);
+    }
+}
