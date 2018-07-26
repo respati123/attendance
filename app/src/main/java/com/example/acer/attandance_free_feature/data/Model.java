@@ -8,7 +8,7 @@ public class Model {
         return ourInstance;
     }
 
-    private Model(){
+    public Model(){
 
     }
 

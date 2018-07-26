@@ -31,13 +31,14 @@
                 android:layout_marginLeft="15dp"
                 android:clickable="true"
                 android:src="@drawable/ic_launcher_background"
-                android:textAlignment="center" />
+                android:textAlignment="center"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:text="Respati"
+                android:id="@+id/nameToolbar"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"/>
 

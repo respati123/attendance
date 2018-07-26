@@ -31,6 +31,8 @@ public class RegisterUsersActivity extends AppCompatActivity implements View.OnC
     private WelcomeHelper wh;
     SharedPreferences sp;
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,7 @@ public class RegisterUsersActivity extends AppCompatActivity implements View.OnC
         boolean isFirst = sp.getBoolean("firsttime", true);
 
         if(!isFirst){
-            startActivity(new Intent(RegisterUsersActivity.this, NavigationDrawerActivity.class));
+            startActivity(new Intent(RegisterUsersActivity.this, MainActivity.class));
         }
 
         setContentView(R.layout.register_users_activity);
