@@ -1,6 +1,8 @@
 package com.example.acer.attandance_free_feature;
 
 import android.Manifest;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,12 +14,18 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.acer.attandance_free_feature.db.entities.Schedules;
+import com.example.acer.attandance_free_feature.db.models.WordViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +44,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class CheckInActivity extends AppCompatActivity implements MapEventsReceiver{
 
@@ -58,15 +67,21 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
     private String encodedImage;
 
     static final int TAKE_SELFIE_REQUEST = 1;
+    private WordViewModel wordViewModel;
+
+    private RecyclerView mRecyclerView;
+    private ScheduleViewAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Context ctx = getApplicationContext();
+        final Context ctx = this.getApplicationContext();
         org.osmdroid.config.Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
         setContentView(R.layout.activity_check_in);
 
+        //Permission Check
         boolean fineLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         boolean coarseLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         boolean externalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
@@ -82,6 +97,24 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
         if(!externalStoragePermission) {
             finish();
         }
+
+        wordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
+
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new ScheduleViewAdapter(this);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        wordViewModel.getAllSchedule().observe(this, new Observer<List<Schedules>>() {
+            @Override
+            public void onChanged(@Nullable List<Schedules> schedules) {
+                mAdapter.setSchedule(schedules);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
