@@ -67,6 +67,15 @@ public abstract class WordRoomDatabase extends RoomDatabase {
             absensi.type = "checkin";
             mAbsensi.Insert(absensi);
 
+            Schedules schedules = new Schedules();
+            schedules.id_users = idUser;
+            schedules.date = "2009-06-15";
+            schedules.time = "13:45:30";
+            schedules.desc = "meeting baru";
+            schedules.meet = "Imah";
+            schedules.client_name = "clozzet";
+            mSchedule.insert(schedules);
+            
             return null;
 
         }

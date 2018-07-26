@@ -27,7 +27,7 @@ public class Schedules {
     public int id_users;
 
     @ColumnInfo(name = "client_name")
-    public String name;
+    public String client_name;
 
     @ColumnInfo(name = "job")
     public String job;
@@ -57,7 +57,7 @@ public class Schedules {
     }
 
     public String getName() {
-        return name;
+        return client_name;
     }
 
     public String getDate() {
@@ -93,7 +93,7 @@ public class Schedules {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.client_name = name;
     }
 
     public void setDate(String date) {
