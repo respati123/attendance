@@ -1,8 +1,10 @@
 package com.example.acer.attandance_free_feature;
 
+import android.Manifest;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +46,8 @@ import static com.example.acer.attandance_free_feature.R.menu.navigation_drawer;
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener {
 
+
+
     WelcomeHelper wh;
     Menu drawerMenu;
     NavigationView navigationView;
@@ -50,6 +55,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private WordViewModel wvm;
     public int id;
     public String username, name, image;
+    private boolean fineLocPermission;
+    private boolean coarseLocPermission;
+    private boolean externalStoragePermission;
 
 
     //inisialisasi View
@@ -73,6 +81,36 @@ public class NavigationDrawerActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        fineLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        coarseLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        externalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if(!fineLocPermission){
+            Log.v("TEST", "NO PERMISSION FOR LOCATION, ATTEMPT REQUEST");
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1
+            );
+        }
+
+        if(!coarseLocPermission){
+            Log.v("TEST", "NO PERMISSION FOR LOCATION, ATTEMPT REQUEST");
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    1
+            );
+        }
+
+        if(!externalStoragePermission) {
+            Log.v("TEST", "NO PERMISSION FOR EXTERNAL STORAGE, ATTEMPT REQUEST");
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1
+            );
+        }
         //inisialisasi floating button
         //Setonclicklistener sebagai eksekusi jika kita klik tombol floating
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -270,5 +308,34 @@ public class NavigationDrawerActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         Log.d("TEST", "on Resume");
+    }
+
+    public void goToCheckIn(View view) {
+
+        if(!coarseLocPermission && !fineLocPermission){
+            Log.v("TEST", "NO PERMISSION FOR LOCATION, ATTEMPT REQUEST");
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    1
+            );
+
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1
+            );
+            if(!coarseLocPermission && !fineLocPermission) return;
+        }
+
+        if(!externalStoragePermission) {
+            Log.v("TEST", "NO PERMISSION FOR EXTERNAL STORAGE, ATTEMPT REQUEST");
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1
+            );
+            if(!externalStoragePermission) return;
+        }
     }
 }

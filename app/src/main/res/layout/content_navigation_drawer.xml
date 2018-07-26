@@ -8,4 +8,12 @@
     tools:context=".NavigationDrawerActivity"
     tools:showIn="@layout/app_bar_navigation_drawer">
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="goToCheckIn"
+        android:text="Check In"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="107dp" />
 </android.support.constraint.ConstraintLayout>
