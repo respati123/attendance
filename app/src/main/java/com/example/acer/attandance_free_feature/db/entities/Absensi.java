@@ -15,6 +15,10 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
         {@ForeignKey(entity = Users.class,
                 parentColumns = {"id_users"},
                 childColumns = {"id_user"},
+                onDelete = CASCADE),
+        @ForeignKey(entity = Schedules.class,
+                parentColumns = {"id_schedule"},
+                childColumns = {"id_schedules"},
                 onDelete = CASCADE)})
 
 public class Absensi {
@@ -37,6 +41,9 @@ public class Absensi {
     @ColumnInfo(name = "id_user")
     public int id_user;
 
+    @ColumnInfo(name = "id_schedules")
+    public int id_schedules;
+
     @ColumnInfo(name = "time")
     public String time;
 
@@ -58,6 +65,9 @@ public class Absensi {
         return id;
     }
 
+    public int getId_schedules() {
+        return id_schedules;
+    }
 
     public String getImage() {
         return image;
@@ -109,5 +119,9 @@ public class Absensi {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setId_schedules(int id_schedules) {
+        this.id_schedules = id_schedules;
     }
 }
