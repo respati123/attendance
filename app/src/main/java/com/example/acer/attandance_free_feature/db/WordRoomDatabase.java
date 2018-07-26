@@ -57,24 +57,27 @@ public abstract class WordRoomDatabase extends RoomDatabase {
 
             int idUser = mUsers.getUsers().getId();
 
+            Schedules schedules = new Schedules();
+            for(int i = 0; i < 10; i++){
+                schedules.id_users = idUser;
+                schedules.date = "2009-0" + i + "-15";
+                schedules.time = "13:45:3"+i;
+                schedules.desc = "meeting baru"+i;
+                schedules.meet = "Imah"+i;
+                schedules.client_name = "clozzet"+i;
+                mSchedule.insert(schedules);
+            }
+
 
             Absensi absensi = new Absensi();
             absensi.id_user = idUser;
+            absensi.id_schedules = 1;
             absensi.lat = -6.181935;
             absensi.lon = 106.8031835;
             absensi.time = "2009-06-15T13:45:30";
             absensi.image = "respati";
             absensi.type = "checkin";
             mAbsensi.Insert(absensi);
-
-            Schedules schedules = new Schedules();
-            schedules.id_users = idUser;
-            schedules.date = "2009-06-15";
-            schedules.time = "13:45:30";
-            schedules.desc = "meeting baru";
-            schedules.meet = "Imah";
-            schedules.client_name = "clozzet";
-            mSchedule.insert(schedules);
             
             return null;
 
