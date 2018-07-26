@@ -1,5 +1,6 @@
 package com.example.acer.attandance_free_feature;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -10,13 +11,17 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
@@ -29,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.acer.attandance_free_feature.data.Model;
+import com.example.acer.attandance_free_feature.db.entities.Schedules;
 import com.example.acer.attandance_free_feature.db.entities.Users;
 import com.example.acer.attandance_free_feature.db.models.WordViewModel;
 
@@ -50,11 +56,50 @@ public class MainActivity extends AppCompatActivity {
     private int id;
     private WordViewModel wordViewModel;
     private LiveData<List<Users>> getDataUser;
+    private boolean fineLocPermission;
+    private boolean coarseLocPermission;
+    private boolean externalStoragePermission;
+
+    private RecyclerView mRecyclerView;
+    private ScheduleViewAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fineLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        coarseLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        externalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if(!fineLocPermission){
+            Log.v("TEST", "NO PERMISSION FOR LOCATION, ATTEMPT REQUEST");
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1
+            );
+        }
+
+        if(!coarseLocPermission){
+            Log.v("TEST", "NO PERMISSION FOR LOCATION, ATTEMPT REQUEST");
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    1
+            );
+        }
+
+        if(!externalStoragePermission) {
+            Log.v("TEST", "NO PERMISSION FOR EXTERNAL STORAGE, ATTEMPT REQUEST");
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1
+            );
+        }
 
         context = getApplicationContext();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -67,10 +112,6 @@ public class MainActivity extends AppCompatActivity {
         wordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
         getUserInformation(getDataUser = wordViewModel.getUserList());
 
-        //private global variable data user
-
-
-        //put data in activity
 
 
 
@@ -203,5 +244,40 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void goToCheckIn(View view) {
+        fineLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        coarseLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        externalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if(!coarseLocPermission && !fineLocPermission){
+            Log.v("TEST", "NO PERMISSION FOR LOCATION, ATTEMPT REQUEST");
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    1
+            );
+
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1
+            );
+            if(!coarseLocPermission && !fineLocPermission) return;
+        }
+
+        if(!externalStoragePermission) {
+            Log.v("TEST", "NO PERMISSION FOR EXTERNAL STORAGE, ATTEMPT REQUEST");
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1
+            );
+            if(!externalStoragePermission) return;
+        }
+
+        Intent intent = new Intent(this, CheckInActivity.class);
+        startActivity(intent);
     }
 }

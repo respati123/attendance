@@ -311,6 +311,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     public void goToCheckIn(View view) {
+        fineLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        coarseLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        externalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
         if(!coarseLocPermission && !fineLocPermission){
             Log.v("TEST", "NO PERMISSION FOR LOCATION, ATTEMPT REQUEST");
@@ -337,5 +340,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
             );
             if(!externalStoragePermission) return;
         }
+
+        Intent intent = new Intent(this, CheckInActivity.class);
+        startActivity(intent);
     }
 }

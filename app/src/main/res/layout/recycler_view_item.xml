@@ -4,8 +4,20 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:id="@+id/clientName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/repName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
         android:id="@+id/scheduleDetails"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="43dp"
         android:background="@android:color/holo_orange_light" />
 </LinearLayout>

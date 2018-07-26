@@ -91,6 +91,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
                         ctx.getApplicationContext(),
                         WordRoomDatabase.class,
                         "words")
+                        .addCallback(sRoomDatabaseCallback)
                         .build();
 
             }

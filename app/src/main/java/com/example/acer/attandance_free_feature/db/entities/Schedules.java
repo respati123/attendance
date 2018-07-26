@@ -15,7 +15,9 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
         childColumns = {"id_user"},
         onDelete = CASCADE
 )})
-public class Schedules {
+public class
+
+Schedules {
 
 
     @PrimaryKey(autoGenerate = true)
