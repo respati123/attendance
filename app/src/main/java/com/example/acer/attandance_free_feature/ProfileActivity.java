@@ -66,16 +66,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         btnBack.setOnClickListener(this);
         btnCamera.setOnClickListener(this);
 
-        //init global variable for dataactivity
-        username = Model.getInstance().username;
-        name = Model.getInstance().name;
-        id = Model.getInstance().id;
-        image = Model.getInstance().image;
-
-        //set data in activity
-        setDataInActivity();
-
-
     }
 
     private void setDataInActivity() {
@@ -131,7 +121,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             if(encoded != null){
                 boolean result = updateDataImage(encoded);
                 if(result){
+                    //initiate
+                    Model.getInstance().image = encoded;
+                    username = Model.getInstance().username;
+                    name = Model.getInstance().name;
+                    id = Model.getInstance().id;
+                    image = Model.getInstance().image;
+
                     setDataInActivity();
+
                     Log.d("TEST", Model.getInstance().username + "," + Model.getInstance().name + "," + Model.getInstance().image + "," + Model.getInstance().id);
                 }
             }
