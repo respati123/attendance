@@ -9,14 +9,16 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.example.acer.attandance_free_feature.db.dao.AbsensiDao;
+import com.example.acer.attandance_free_feature.db.dao.ScheduleDao;
 import com.example.acer.attandance_free_feature.db.dao.UsersDao;
 import com.example.acer.attandance_free_feature.db.dao.WordsDao;
 import com.example.acer.attandance_free_feature.db.entities.Absensi;
+import com.example.acer.attandance_free_feature.db.entities.Schedules;
 import com.example.acer.attandance_free_feature.db.entities.Users;
 import com.example.acer.attandance_free_feature.db.entities.Words;
 
 
-@Database(entities = {Words.class, Users.class, Absensi.class}, version = 1)
+@Database(entities = {Words.class, Users.class, Absensi.class, Schedules.class}, version = 1)
 public abstract class WordRoomDatabase extends RoomDatabase {
 
     private static WordRoomDatabase INSTANCE;
@@ -36,11 +38,13 @@ public abstract class WordRoomDatabase extends RoomDatabase {
         private final WordsDao mDao;
         private final AbsensiDao mAbsensi;
         private final UsersDao mUsers;
+        private final ScheduleDao mSchedule;
 
         PopulateDbAsync(WordRoomDatabase db) {
             mDao = db.wordsDao();
             mAbsensi = db.AbsensiDao();
             mUsers = db.usersDao();
+            mSchedule = db.ScheduleDao();
         }
 
         @Override
@@ -85,6 +89,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
     public abstract WordsDao wordsDao();
     public abstract UsersDao usersDao();
     public abstract AbsensiDao AbsensiDao();
+    public abstract ScheduleDao ScheduleDao();
 
 
 }
