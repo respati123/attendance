@@ -1,7 +1,9 @@
 package com.example.acer.attandance_free_feature;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -20,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
+import org.osmdroid.tileprovider.cachemanager.CacheManager;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
@@ -63,21 +67,21 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
 
         setContentView(R.layout.activity_check_in);
 
-//        boolean fineLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-//        boolean coarseLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-//        boolean externalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-//
-//        if(!fineLocPermission){
-//            finish();
-//        }
-//
-//        if(!coarseLocPermission){
-//            finish();
-//        }
-//
-//        if(!externalStoragePermission) {
-//            finish();
-//        }
+        boolean fineLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        boolean coarseLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        boolean externalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if(!fineLocPermission){
+            finish();
+        }
+
+        if(!coarseLocPermission){
+            finish();
+        }
+
+        if(!externalStoragePermission) {
+            finish();
+        }
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -203,8 +207,8 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
 //        circle.setStrokeWidth(2);
 //        map.getOverlays().add(circle);
         BoundingBox bb = map.getBoundingBox();
-//        CacheManager cm = new CacheManager(map);
-//        cm.downloadAreaAsync(this, bb, 9, 19);
+        CacheManager cm = new CacheManager(map);
+        cm.downloadAreaAsync(this, bb, 9, 19);
 
         MapEventsOverlay eo = new MapEventsOverlay(this, this);
         map.getOverlays().add(0, eo);
