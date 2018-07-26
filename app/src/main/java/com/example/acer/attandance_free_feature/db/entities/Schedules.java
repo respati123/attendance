@@ -23,7 +23,7 @@ public class Schedules {
     @ColumnInfo(name = "id_schedule")
     public int id;
 
-    @ColumnInfo(name = "id_users")
+    @ColumnInfo(name = "id_user")
     public int id_users;
 
     @ColumnInfo(name = "client_name")
