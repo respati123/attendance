@@ -1,31 +1,31 @@
 package com.example.acer.attandance_free_feature;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telecom.Call;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TimePicker;
-import android.widget.Toolbar;
 
-import java.lang.reflect.Type;
+import com.example.acer.attandance_free_feature.AsyncTask.AsyncTaskInsertSchedule;
+import com.example.acer.attandance_free_feature.data.Model;
+import com.example.acer.attandance_free_feature.db.entities.Schedules;
+import com.example.acer.attandance_free_feature.db.models.WordViewModel;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
-import java.util.SimpleTimeZone;
+import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -74,12 +74,15 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
     TimePickerDialog timePickerDialog;
     SimpleDateFormat dateFormat;
     Context context;
+    WordViewModel wvm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
-        context = getApplicationContext();
+        context = this;
+
+        wvm = ViewModelProviders.of(this).get(WordViewModel.class);
 
         dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         mToolbar    = findViewById(R.id.toolbar);
@@ -93,8 +96,8 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
         ic_date     = findViewById(R.id.icon_date);
         ic_time     = findViewById(R.id.icon_time);
 
-        btn_save    = mToolbar.findViewById(R.id.save);
-        btn_cancel  = mToolbar.findViewById(R.id.cancel);
+        btn_save    = findViewById(R.id.save);
+        btn_cancel  = findViewById(R.id.cancel);
 
         setDateTimeField();
 
@@ -172,6 +175,22 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
         return true;
     }
 
+    private HashMap<String, String> getValuefromView(){
+
+        final int idUser = Model.getInstance().id;
+        HashMap<String, String> list = new HashMap<>();
+        list.put("name", edt_client.getText().toString());
+        list.put("job", edt_job.getText().toString());
+        list.put("service", edt_service.getText().toString());
+        list.put("date", edt_date.getText().toString());
+        list.put("time", edt_time.getText().toString());
+        list.put("meet", edt_meet.getText().toString());
+        list.put("desc", edt_description.getText().toString());
+        list.put("id", String.valueOf(idUser));
+
+        return list;
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -187,6 +206,9 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
             case R.id.save:
                 if(validationField()){
 
+                    AsyncTaskInsertSchedule asyncTaskInsertSchedule = new AsyncTaskInsertSchedule(getValuefromView(), this, btn_save, wvm);
+                    asyncTaskInsertSchedule.execute();
+                    btn_save.setEnabled(false);
                 }
                 default:
                     break;

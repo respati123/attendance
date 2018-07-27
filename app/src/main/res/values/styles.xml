@@ -25,7 +25,7 @@
         <item name="android:backgroundTint" tools:targetApi="lollipop">@android:color/white</item>
     </style>
 
-        <style name="HeaderBar">
-            <item name="android:background">#303F9F</item>
-        </style>
+    <style name="HeaderBar">
+        <item name="android:background">#303F9F</item>
+    </style>
 </resources>

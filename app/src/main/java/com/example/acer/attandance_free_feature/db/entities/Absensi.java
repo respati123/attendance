@@ -33,6 +33,7 @@ public class Absensi {
 //        this.image = image;
 //        this.type = type;
 //    }
+
     @PrimaryKey(autoGenerate = true)
     @NonNull
     @ColumnInfo(name = "id")
