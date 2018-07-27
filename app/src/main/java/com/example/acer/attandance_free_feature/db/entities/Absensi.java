@@ -24,15 +24,14 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class Absensi {
 
 
-//    public Absensi(int id, int id_user, String time, Long lat, Long lon, String image, String type){
-//        this.id = id;
-//        this.id_user = id_user;
-//        this.time = time;
-//        this.lat = lat;
-//        this.lon = lon;
-//        this.image = image;
-//        this.type = type;
-//    }
+    public Absensi(int id_user, String time, Double lat, Double lon, String image, String type){
+        this.id_user = id_user;
+        this.time = time;
+        this.lat = lat;
+        this.lon = lon;
+        this.image = image;
+        this.type = type;
+    }
     @PrimaryKey(autoGenerate = true)
     @NonNull
     @ColumnInfo(name = "id")
