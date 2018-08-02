@@ -58,7 +58,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
             int idUser = mUsers.getUsers().getId();
 
             Schedules schedules = new Schedules();
-            for(int i = 0; i < 10; i++){
+            for(int i = 0; i <= 3; i++){
                 schedules.id_users = idUser;
                 schedules.date = "2009-0" + i + "-15";
                 schedules.time = "13:45:3"+i;

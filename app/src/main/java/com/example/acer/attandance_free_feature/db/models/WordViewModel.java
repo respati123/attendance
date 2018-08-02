@@ -62,6 +62,10 @@ public class WordViewModel extends AndroidViewModel {
         ar.insert(absensi);
     }
 
+    public void getAllCheckIn(){
+        ar.getCheckinReport();
+    }
+
     //users
     public LiveData<List<Users>> getUserList() {
         return userList;
