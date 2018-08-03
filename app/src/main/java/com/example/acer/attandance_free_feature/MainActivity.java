@@ -280,4 +280,15 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CheckInActivity.class);
         startActivity(intent);
     }
+
+    public void goToSchedule(View view){
+
+        startActivity(new Intent(MainActivity.this, ScheduleMainActivity.class));
+        finish();
+    }
+
+    public void goToExport(View view){
+        startActivity(new Intent(MainActivity.this, ExportActivity.class));
+        finish();
+    }
 }

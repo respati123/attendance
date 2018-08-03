@@ -26,4 +26,5 @@ public interface UsersDao {
 
     @Query("SELECT * FROM user LIMIT 1")
     Users getUsers();
+
 }

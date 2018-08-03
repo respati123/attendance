@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import com.example.acer.attandance_free_feature.db.WordRoomDatabase;
 import com.example.acer.attandance_free_feature.db.dao.AbsensiDao;
 import com.example.acer.attandance_free_feature.db.entities.Absensi;
+import com.example.acer.attandance_free_feature.db.entities.Schedules;
 
 import java.util.List;
 
@@ -30,6 +31,9 @@ public class AbsensiRepository  {
         new insertAbsensiAsyncTask(absensiDao).execute(absensi);
     }
 
+    public void getCheckinReport(){
+        absensiDao.getDataCheckIn();
+    }
 
     private class insertAbsensiAsyncTask extends AsyncTask<Absensi, Void, Void>{
         private AbsensiDao mAbsensiDao;

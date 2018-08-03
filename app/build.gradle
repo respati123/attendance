@@ -46,4 +46,6 @@ dependencies {
     implementation 'org.osmdroid:osmdroid-android:6.0.1'
     implementation 'com.github.MKergall:osmbonuspack:6.5.1'
     implementation 'com.android.volley:volley:1.1.0'
+
+    implementation 'com.vamsi:customcalendar:1.0.0'
 }
