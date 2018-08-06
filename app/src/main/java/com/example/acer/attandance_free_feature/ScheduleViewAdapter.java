@@ -66,6 +66,10 @@ public class ScheduleViewAdapter extends RecyclerView.Adapter<ScheduleViewAdapte
         return 0;
     }
 
+    public Schedules getChosenSchedule(){
+        return scheduleList.get(expandedPosition);
+    }
+
     public class ScheduleViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView details;

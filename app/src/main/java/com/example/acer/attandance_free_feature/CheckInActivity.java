@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.acer.attandance_free_feature.db.entities.Absensi;
 import com.example.acer.attandance_free_feature.db.entities.Schedules;
 import com.example.acer.attandance_free_feature.db.models.WordViewModel;
 
@@ -141,55 +142,9 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
 
                 updateButton();
 
-                Log.i("Action", "Clock In");
-                String url = "http://10.0.2.2:3000/userLocations/"+String.valueOf(userId);
-                DateFormat df = new SimpleDateFormat();
-                Date date = new Date();
-
-                JSONObject body = new JSONObject();
-                try{
-                    body.put("time", df.format(date).toString());
-                    body.put("userId", test);
-                    body.put("lat", lat);
-                    body.put("long", lon);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-//                JsonObjectRequest joReq = new JsonObjectRequest
-//                        (Request.Method.PUT, url, body, new Response.Listener<JSONObject>() {
-//
-//                            @Override
-//                            public void onResponse(JSONObject response) {
-//                                Log.v("VOLLEY RESPONSE", "Response: " + response.toString());
-//
-//                                Toast toast = Toast.makeText(
-//                                        NewCheckInActivity.this,
-//                                        "Location Updated",
-//                                        Toast.LENGTH_LONG
-//                                );
-//
-//                                toast.show();
-//                            }
-//                        }, new Response.ErrorListener() {
-//                            @Override
-//                            public void onErrorResponse(VolleyError error) {
-//
-//                                Toast toast = Toast.makeText(NewCheckInActivity.this, "Error", Toast.LENGTH_LONG);
-//                                toast.show();
-//                                Log.v("VOLLEY RESPONSE", "ERROR UPDATING LOCATION");
-//
-//                            }
-//                        }) { //no semicolon or coma
-//                    @Override
-//                    public Map<String, String> getHeaders() throws AuthFailureError {
-//                        Map<String, String> params = new HashMap<String, String>();
-//                        params.put("Content-Type", "application/json");
-//                        return params;
-//                    }
-//                };
-//                RequestQueue q = Volley.newRequestQueue(ctx);
-//                q.add(joReq);
+//                Log.i("Action", "Clock In");
+//                DateFormat df = new SimpleDateFormat();
+//                Date date = new Date();
 
                 userPos.setPosition(user);
                 map.invalidate();
@@ -348,7 +303,7 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
 //        q.add(joReq);
     }
 
-    public void clockIn(View view) {
+    public void checkIn(View view) {
 //        CacheManager cm = new CacheManager(map);
 //        cm.downloadAreaAsync(this, points, 5, 19 );
 
@@ -392,49 +347,12 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
             Date date = new Date();
 
             Log.i("Action", encodedImage);
-            JSONObject body = new JSONObject();
-            try{
-                body.put("time", df.format(date).toString());
-                body.put("userId", "1");
-                body.put("image", encodedImage);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-//
-//            JsonObjectRequest joReq = new JsonObjectRequest
-//                    (Request.Method.POST, url, body, new Response.Listener<JSONObject>() {
-//
-//                        @Override
-//                        public void onResponse(JSONObject response) {
-//                            Log.v("VOLLEY RESPONSE", "Response: " + response.toString());
-//
-//                            Toast toast = Toast.makeText(
-//                                    NewCheckInActivity.this,
-//                                    "Clock In Success!",
-//                                    Toast.LENGTH_LONG
-//                            );
-//
-//                            toast.show();
-//                        }
-//                    }, new Response.ErrorListener() {
-//                        @Override
-//                        public void onErrorResponse(VolleyError error) {
-//
-//                            Toast toast = Toast.makeText(NewCheckInActivity.this, "Error", Toast.LENGTH_LONG);
-//                            toast.show();
-//                            Log.v("VOLLEY RESPONSE", "ERROR");
-//
-//                        }
-//                    }) { //no semicolon or coma
-//                @Override
-//                public Map<String, String> getHeaders() throws AuthFailureError {
-//                    Map<String, String> params = new HashMap<String, String>();
-//                    params.put("Content-Type", "application/json");
-//                    return params;
-//                }
-//            };
-//            RequestQueue q = Volley.newRequestQueue(this);
-//            q.add(joReq);
+
+            Schedules chosen = mAdapter.getChosenSchedule();
+
+            Absensi insert = new Absensi(userId, date.toString(), locGPS.getLatitude(), locGPS.getLongitude(), encodedImage, "Check In");
+            insert.setId_schedules(chosen.getId());
+            wordViewModel.insert(insert);
         }
     }
 
@@ -444,5 +362,4 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
             startActivityForResult(takeSelfieIntent, TAKE_SELFIE_REQUEST);
         }
     }
-
 }
