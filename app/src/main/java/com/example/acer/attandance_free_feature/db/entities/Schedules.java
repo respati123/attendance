@@ -12,7 +12,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 @Entity(tableName = "schedule", foreignKeys = {@ForeignKey(
         entity = Users.class,
         parentColumns = {"id_users"},
-        childColumns = {"id_user"},
+        childColumns = {"sc_id_user"},
         onDelete = CASCADE
 )})
 public class
@@ -25,7 +25,7 @@ Schedules {
     @ColumnInfo(name = "id_schedule")
     public int id;
 
-    @ColumnInfo(name = "id_user")
+    @ColumnInfo(name = "sc_id_user")
     public int id_users;
 
     @ColumnInfo(name = "client_name")
@@ -37,10 +37,10 @@ Schedules {
     @ColumnInfo(name = "service")
     public String service;
 
-    @ColumnInfo(name = "date")
+    @ColumnInfo(name = "sc_date")
     public String date;
 
-    @ColumnInfo(name = "time")
+    @ColumnInfo(name = "sc_time")
     public String time;
 
     @ColumnInfo(name = "meet")

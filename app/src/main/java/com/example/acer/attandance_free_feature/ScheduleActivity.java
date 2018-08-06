@@ -5,10 +5,12 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -84,7 +86,7 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
 
         wvm = ViewModelProviders.of(this).get(WordViewModel.class);
 
-        dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         mToolbar    = findViewById(R.id.toolbar);
         edt_client  = findViewById(R.id.client_name);
         edt_job     = findViewById(R.id.job);
@@ -118,6 +120,7 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, month, dayOfMonth);
                 edt_date.setText(dateFormat.format(newDate.getTime()));
+
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
@@ -216,5 +219,10 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(ScheduleActivity.this, ScheduleMainActivity.class));
+        finish();
+    }
 }

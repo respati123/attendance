@@ -90,14 +90,20 @@
                 android:onClick="FilterData"
                 android:textSize="10dp"
                 android:id="@+id/filter"
+                android:text="Get Data"
+                android:layout_margin="3dp"
                 android:background="@color/colorPrimary"
                 android:textColor="@android:color/white"/>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:text="filter"
+                android:text="import"
                 android:textSize="10dp"
-                android:visibility="gone"/>
+                android:layout_margin="3dp"
+                android:textColor="@android:color/white"
+                android:id="@+id/import_excel"
+                android:background="@color/colorPrimary"
+                android:visibility="visible"/>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"

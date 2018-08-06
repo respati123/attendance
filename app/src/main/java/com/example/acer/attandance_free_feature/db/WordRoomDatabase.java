@@ -13,6 +13,7 @@ import com.example.acer.attandance_free_feature.db.dao.ScheduleDao;
 import com.example.acer.attandance_free_feature.db.dao.UsersDao;
 import com.example.acer.attandance_free_feature.db.dao.WordsDao;
 import com.example.acer.attandance_free_feature.db.entities.Absensi;
+import com.example.acer.attandance_free_feature.db.entities.AbsensiAndSchedule;
 import com.example.acer.attandance_free_feature.db.entities.Schedules;
 import com.example.acer.attandance_free_feature.db.entities.Users;
 import com.example.acer.attandance_free_feature.db.entities.Words;
@@ -66,19 +67,26 @@ public abstract class WordRoomDatabase extends RoomDatabase {
                 schedules.meet = "Imah"+i;
                 schedules.client_name = "clozzet"+i;
                 mSchedule.insert(schedules);
+
+            }
+
+            for(int j = 1; j <= 5; j++){
+                Absensi absensi = new Absensi();
+                absensi.id_user = idUser;
+                absensi.id_schedules = 1;
+                absensi.lat = -6.181935;
+                absensi.lon = 106.8031835;
+                absensi.time = "0"+j+":05:46";
+                absensi.date = "2018-08-0"+j;
+                absensi.image = "respati"+j;
+                absensi.type = "checkin";
+                mAbsensi.Insert(absensi);
             }
 
 
-            Absensi absensi = new Absensi();
-            absensi.id_user = idUser;
-            absensi.id_schedules = 1;
-            absensi.lat = -6.181935;
-            absensi.lon = 106.8031835;
-            absensi.time = "2009-06-15T13:45:30";
-            absensi.image = "respati";
-            absensi.type = "checkin";
-            mAbsensi.Insert(absensi);
-            
+
+
+
             return null;
 
         }
@@ -91,6 +99,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
                         ctx.getApplicationContext(),
                         WordRoomDatabase.class,
                         "words")
+                        .fallbackToDestructiveMigration()
                         .addCallback(sRoomDatabaseCallback)
                         .build();
 

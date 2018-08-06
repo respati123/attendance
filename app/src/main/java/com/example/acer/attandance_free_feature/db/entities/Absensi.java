@@ -6,6 +6,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
+import android.text.format.Time;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 @Entity(tableName = "absensi", foreignKeys =
         {@ForeignKey(entity = Users.class,
                 parentColumns = {"id_users"},
-                childColumns = {"id_user"},
+                childColumns = {"ab_id_user"},
                 onDelete = CASCADE),
         @ForeignKey(entity = Schedules.class,
                 parentColumns = {"id_schedule"},
@@ -39,14 +40,17 @@ public class Absensi {
     @ColumnInfo(name = "id")
     public int id;
 
-    @ColumnInfo(name = "id_user")
+    @ColumnInfo(name = "ab_id_user")
     public int id_user;
 
     @ColumnInfo(name = "id_schedules")
     public int id_schedules;
 
-    @ColumnInfo(name = "time")
+    @ColumnInfo(name = "ab_time")
     public String time;
+
+    @ColumnInfo(name = "ab_date")
+    public String date;
 
     @ColumnInfo(name = "lat")
     public Double lat;
@@ -94,6 +98,10 @@ public class Absensi {
         return type;
     }
 
+    public String getDate() {
+        return date;
+    }
+
     public void setId(@NonNull int id) {
         this.id = id;
     }
@@ -124,5 +132,9 @@ public class Absensi {
 
     public void setId_schedules(int id_schedules) {
         this.id_schedules = id_schedules;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

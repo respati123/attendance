@@ -7,6 +7,7 @@ import android.arch.lifecycle.LiveData;
 
 import com.example.acer.attandance_free_feature.db.dao.UsersDao;
 import com.example.acer.attandance_free_feature.db.entities.Absensi;
+import com.example.acer.attandance_free_feature.db.entities.AbsensiAndSchedule;
 import com.example.acer.attandance_free_feature.db.entities.Schedules;
 import com.example.acer.attandance_free_feature.db.entities.Users;
 import com.example.acer.attandance_free_feature.db.repositories.AbsensiRepository;
@@ -27,6 +28,7 @@ public class WordViewModel extends AndroidViewModel {
     private LiveData<List<Users>> userList;
     private LiveData<List<Absensi>> absensiList;
     private LiveData<List<Schedules>> scheduleList;
+    private LiveData<List<AbsensiAndSchedule>> absensiAndSchedulesList;
 
     public WordViewModel(Application app){
         super(app);
@@ -62,8 +64,8 @@ public class WordViewModel extends AndroidViewModel {
         ar.insert(absensi);
     }
 
-    public void getAllCheckIn(){
-        ar.getCheckinReport();
+    public LiveData<List<AbsensiAndSchedule>> getAbsensiAndSchedulesList(String from, String to) {
+         return ar.getmGetAllAbsensiWithSchedule(from, to);
     }
 
     //users

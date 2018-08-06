@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface ScheduleDao {
 
-    @Query("SELECT * FROM schedule ORDER BY date ASC")
+    @Query("SELECT * FROM schedule ORDER BY sc_date ASC")
     LiveData<List<Schedules>> getAllSchedule();
 
     @Insert

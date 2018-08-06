@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import com.example.acer.attandance_free_feature.db.WordRoomDatabase;
 import com.example.acer.attandance_free_feature.db.dao.AbsensiDao;
 import com.example.acer.attandance_free_feature.db.entities.Absensi;
+import com.example.acer.attandance_free_feature.db.entities.AbsensiAndSchedule;
 import com.example.acer.attandance_free_feature.db.entities.Schedules;
 
 import java.util.List;
@@ -17,23 +18,28 @@ public class AbsensiRepository  {
 
     private LiveData<List<Absensi>> mGetAllAbsensi;
 
+    private LiveData<List<AbsensiAndSchedule>> mGetAllAbsensiWithSchedule;
+
     public AbsensiRepository (Application application){
         WordRoomDatabase db = WordRoomDatabase.getDatabase(application);
         absensiDao = db.AbsensiDao();
         mGetAllAbsensi = absensiDao.getAllAbsensi();
+
     }
 
     public LiveData<List<Absensi>> getmGetAllAbsensi() {
         return mGetAllAbsensi;
     }
 
+    public LiveData<List<AbsensiAndSchedule>> getmGetAllAbsensiWithSchedule(String from, String to) {
+        return absensiDao.getAllAbsensiRelationSchedule(from, to);
+    }
+
     public void insert(Absensi absensi){
         new insertAbsensiAsyncTask(absensiDao).execute(absensi);
     }
 
-    public void getCheckinReport(){
-        absensiDao.getDataCheckIn();
-    }
+
 
     private class insertAbsensiAsyncTask extends AsyncTask<Absensi, Void, Void>{
         private AbsensiDao mAbsensiDao;
