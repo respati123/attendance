@@ -1,11 +1,13 @@
 package com.example.acer.attandance_free_feature.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
@@ -13,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.acer.attandance_free_feature.R;
+import com.example.acer.attandance_free_feature.ScheduleActivity;
+import com.example.acer.attandance_free_feature.ScheduleMainActivity;
 import com.example.acer.attandance_free_feature.db.entities.Schedules;
 
 import org.w3c.dom.Text;
@@ -26,9 +30,11 @@ public class ScheduleAdapterMain extends RecyclerView.Adapter<ScheduleAdapterMai
     private List<Schedules> scheduleList;
     private List<Schedules> scheduleListered;
     private int expandedPosition;
+    private Context ctx;
 
     public ScheduleAdapterMain(Context context){
         layoutInflater = LayoutInflater.from(context);
+        ctx = context;
     }
 
     @NonNull
@@ -42,6 +48,7 @@ public class ScheduleAdapterMain extends RecyclerView.Adapter<ScheduleAdapterMai
     public void onBindViewHolder(@NonNull ScheduleMainView holder, int position) {
         final boolean isExpand = position == expandedPosition;
         final int currPosition = position;
+
 
         if(scheduleList != null){
             Schedules schedules = scheduleList.get(position);
@@ -59,6 +66,26 @@ public class ScheduleAdapterMain extends RecyclerView.Adapter<ScheduleAdapterMai
             public void onClick(View v) {
                 expandedPosition = isExpand?-1:currPosition;
                 notifyDataSetChanged();
+            }
+        });
+
+        holder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ctx, ScheduleActivity.class);
+                Schedules currSchedule = getCurrentSchedule();
+                intent.putExtra("date", currSchedule.getDate());
+                intent.putExtra("desc", currSchedule.getDesc());
+                intent.putExtra("user_id", currSchedule.getId_users());
+                intent.putExtra("id", currSchedule.getId());
+                intent.putExtra("job", currSchedule.getJob());
+                intent.putExtra("meet", currSchedule.getMeet());
+                intent.putExtra("name", currSchedule.getName());
+                intent.putExtra("service", currSchedule.getService());
+                intent.putExtra("time", currSchedule.getTime());
+                intent.putExtra("edit", true);
+                //start activity
+                ctx.startActivity(intent);
             }
         });
     }
@@ -111,7 +138,9 @@ public class ScheduleAdapterMain extends RecyclerView.Adapter<ScheduleAdapterMai
     public void filterList(List<Schedules> filterList) {
         scheduleList = filterList;
         notifyDataSetChanged();
-    }
+        }
+
+    public Schedules getCurrentSchedule(){return scheduleList.get(expandedPosition);}
 
     public class ScheduleMainView extends RecyclerView.ViewHolder{
 
@@ -120,6 +149,7 @@ public class ScheduleAdapterMain extends RecyclerView.Adapter<ScheduleAdapterMai
         private TextView txtTanggal;
         private LinearLayout linearLayout;
         private RelativeLayout relativeLayout;
+        private Button button;
 
         private ScheduleMainView(View itemView) {
             super(itemView);
@@ -129,10 +159,9 @@ public class ScheduleAdapterMain extends RecyclerView.Adapter<ScheduleAdapterMai
             txtTanggal    = itemView.findViewById(R.id.tanggal_client);
             linearLayout  = itemView.findViewById(R.id.linierlayout);
             relativeLayout = itemView.findViewById(R.id.relative);
-
+            button = itemView.findViewById(R.id.edit_schedule_btn);
 
         }
     }
-
 }
 

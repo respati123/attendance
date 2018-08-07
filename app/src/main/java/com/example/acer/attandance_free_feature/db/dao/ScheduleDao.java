@@ -6,6 +6,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.example.acer.attandance_free_feature.db.entities.Schedules;
 
@@ -23,5 +24,7 @@ public interface ScheduleDao {
     @Delete
     void delete(Schedules schedules);
 
+    @Update
+    void update(Schedules schedules);
 
 }

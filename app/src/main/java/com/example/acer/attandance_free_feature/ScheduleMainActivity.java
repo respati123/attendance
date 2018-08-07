@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -54,6 +55,7 @@ public class ScheduleMainActivity extends AppCompatActivity {
     private View inflaterCalendar;
     private WordViewModel wordViewModel;
     private List<Schedules> schedulesList;
+    private Button editButton;
 
 
     private int first = 0;
@@ -89,6 +91,7 @@ public class ScheduleMainActivity extends AppCompatActivity {
         mLinearLayout = (LinearLayout) findViewById(R.id.linearLayout);
         mLinearToolbar = (LinearLayout) findViewById(R.id.linearToolbar);
         mLinearSearch = (LinearLayout) findViewById(R.id.linearSearch);
+        editButton = findViewById(R.id.edit_schedule_btn);
 
 
         //item in Calendar layout
@@ -162,6 +165,26 @@ public class ScheduleMainActivity extends AppCompatActivity {
                 mLinearSearch.startAnimation(slide_up);
             }
         });
+//
+//        editButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(context, ScheduleActivity.class);
+//                Schedules currSchedule = scheduleAdapterMain.getCurrentSchedule();
+//                intent.putExtra("date", currSchedule.getDate());
+//                intent.putExtra("desc", currSchedule.getDesc());
+//                intent.putExtra("user_id", currSchedule.getId_users());
+//                intent.putExtra("id", currSchedule.getId());
+//                intent.putExtra("job", currSchedule.getJob());
+//                intent.putExtra("meet", currSchedule.getMeet());
+//                intent.putExtra("name", currSchedule.getName());
+//                intent.putExtra("service", currSchedule.getService());
+//                intent.putExtra("time", currSchedule.getTime());
+//                intent.putExtra("edit", true);
+//                //start activity
+//                startActivity(intent);
+//            }
+//        });
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -225,11 +248,19 @@ public class ScheduleMainActivity extends AppCompatActivity {
 
     public void goToEditForm(){
         Intent intent = new Intent(this, ScheduleActivity.class);
-
-        //get schedule chosen
-        //put extras
+        Schedules currSchedule = scheduleAdapterMain.getCurrentSchedule();
+        intent.putExtra("date", currSchedule.getDate());
+        intent.putExtra("desc", currSchedule.getDesc());
+        intent.putExtra("user_id", currSchedule.getId_users());
+        intent.putExtra("id", currSchedule.getId());
+        intent.putExtra("job", currSchedule.getJob());
+        intent.putExtra("meet", currSchedule.getMeet());
+        intent.putExtra("name", currSchedule.getName());
+        intent.putExtra("service", currSchedule.getService());
+        intent.putExtra("time", currSchedule.getTime());
+        intent.putExtra("edit", true);
         //start activity
-
+        startActivity(intent);
     }
 
     //    private void prepareMovieData() {

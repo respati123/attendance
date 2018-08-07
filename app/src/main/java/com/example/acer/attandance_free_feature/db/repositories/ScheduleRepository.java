@@ -32,6 +32,10 @@ public class ScheduleRepository {
         new InsertAsyncTaskSchedule(scheduleDao).execute(schedules);
     }
 
+    public void update(Schedules schedule){
+        new UpdateAsyncTaskSchedule(scheduleDao).execute(schedule);
+    }
+
     private class InsertAsyncTaskSchedule extends AsyncTask<Schedules, Void, Void>{
 
         private ScheduleDao mDao;
@@ -43,6 +47,20 @@ public class ScheduleRepository {
         @Override
         protected Void doInBackground(Schedules... schedules) {
             mDao.insert(schedules[0]);
+            return null;
+        }
+    }
+
+    private class UpdateAsyncTaskSchedule extends AsyncTask<Schedules, Void, Void>{
+        private ScheduleDao mDao;
+
+        public UpdateAsyncTaskSchedule(ScheduleDao scheduleDao) {
+            mDao = scheduleDao;
+        }
+
+        @Override
+        protected Void doInBackground(Schedules... schedules) {
+            mDao.update(schedules[0]);
             return null;
         }
     }

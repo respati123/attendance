@@ -72,11 +72,13 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
     ImageView ic_time;
 
     //initiate
-    DatePickerDialog datePickerDialog;
-    TimePickerDialog timePickerDialog;
-    SimpleDateFormat dateFormat;
-    Context context;
-    WordViewModel wvm;
+    private DatePickerDialog datePickerDialog;
+    private TimePickerDialog timePickerDialog;
+    private SimpleDateFormat dateFormat;
+    private Context context;
+    private WordViewModel wvm;
+    private boolean edit = false;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +87,7 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
         context = this;
 
         wvm = ViewModelProviders.of(this).get(WordViewModel.class);
+        intent = getIntent();
 
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         mToolbar    = findViewById(R.id.toolbar);
@@ -101,13 +104,26 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
         btn_save    = findViewById(R.id.save);
         btn_cancel  = findViewById(R.id.cancel);
 
+        edit = intent.getBooleanExtra("edit", false);
+
         setDateTimeField();
 
         btn_save.setOnClickListener(this);
         btn_cancel.setOnClickListener(this);
 
-        //check if from edit
-        //if edit add extras to edit text
+
+
+        if(edit){
+            Bundle extras = intent.getExtras();
+            edt_client.setText((String)extras.get("name"));
+            edt_job.setText((String)extras.get("job"));
+            edt_service.setText((String)extras.get("service"));
+            edt_date.setText((String)extras.get("date"));
+            edt_description.setText((String)extras.get("desc"));
+            edt_time.setText((String)extras.get("time"));
+            edt_meet.setText((String)extras.get("meet"));
+        }
+
     }
 
     @TargetApi(Build.VERSION_CODES.N)
@@ -197,6 +213,27 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
         return list;
     }
 
+    private Schedules createScheduleObj(){
+        Schedules schedule = new Schedules();
+        Bundle bundle = intent.getExtras();
+        if(edit){
+            schedule.setId_users((int)bundle.get("user_id"));
+            schedule.setId(bundle.getInt("id"));
+        }else {
+            final int idUser = Model.getInstance().id;
+            schedule.setId_users(idUser);
+        }
+        schedule.setName(edt_client.getText().toString());
+        schedule.setJob(edt_job.getText().toString());
+        schedule.setService(edt_service.getText().toString());
+        schedule.setDate(edt_date.getText().toString());
+        schedule.setTime(edt_time.getText().toString());
+        schedule.setMeet(edt_meet.getText().toString());
+        schedule.setDesc(edt_description.getText().toString());
+
+        return schedule;
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -212,11 +249,17 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
             case R.id.save:
                 if(validationField()){
 
-                    //check if edit mode, update data
-
-                    AsyncTaskInsertSchedule asyncTaskInsertSchedule = new AsyncTaskInsertSchedule(getValuefromView(), this, btn_save, wvm);
-                    asyncTaskInsertSchedule.execute();
-                    btn_save.setEnabled(false);
+                    if(edit){
+                        Schedules schedule = createScheduleObj();
+                        wvm.update(schedule);
+                        startActivity(new Intent(ScheduleActivity.this, ScheduleMainActivity.class));
+                        finish();
+                    }else{
+//                        AsyncTaskInsertSchedule asyncTaskInsertSchedule = new AsyncTaskInsertSchedule(getValuefromView(), this, btn_save, wvm);
+//                        asyncTaskInsertSchedule.execute();
+                        wvm.insert(createScheduleObj());
+                        btn_save.setEnabled(false);
+                    }
                 }
                 default:
                     break;
@@ -230,4 +273,6 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
         startActivity(new Intent(ScheduleActivity.this, ScheduleMainActivity.class));
         finish();
     }
+
+
 }

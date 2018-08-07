@@ -19,12 +19,10 @@ import com.example.acer.attandance_free_feature.db.entities.Words;
 import java.util.List;
 
 public class WordViewModel extends AndroidViewModel {
-    private WordRepository wr;
     private UserRepository ur;
     private AbsensiRepository ar;
     private ScheduleRepository sr;
 
-    private LiveData<List<Words>> wordList;
     private LiveData<List<Users>> userList;
     private LiveData<List<Absensi>> absensiList;
     private LiveData<List<Schedules>> scheduleList;
@@ -32,9 +30,6 @@ public class WordViewModel extends AndroidViewModel {
 
     public WordViewModel(Application app){
         super(app);
-        wr = new WordRepository(app);
-        wordList = wr.getAllWords();
-
         ur = new UserRepository(app);
         userList = ur.getmGetAllUser();
 
@@ -54,6 +49,8 @@ public class WordViewModel extends AndroidViewModel {
     public void insert(Schedules schedules){
         sr.Insert(schedules);
     }
+
+    public void update(Schedules schedule){sr.update(schedule);}
 
     //absensi
     public LiveData<List<Absensi>> getAbsensiList() {
@@ -83,16 +80,5 @@ public class WordViewModel extends AndroidViewModel {
 
     public void getUsers(){
         ur.getUsers();
-    }
-
-
-    //word
-
-    public LiveData<List<Words>> getAllWords(){
-        return wordList;
-    }
-
-    public void insert(Words word){
-        wr.insertWord(word);
     }
 }
