@@ -105,6 +105,9 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
 
         btn_save.setOnClickListener(this);
         btn_cancel.setOnClickListener(this);
+
+        //check if from edit
+        //if edit add extras to edit text
     }
 
     @TargetApi(Build.VERSION_CODES.N)
@@ -208,6 +211,8 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.save:
                 if(validationField()){
+
+                    //check if edit mode, update data
 
                     AsyncTaskInsertSchedule asyncTaskInsertSchedule = new AsyncTaskInsertSchedule(getValuefromView(), this, btn_save, wvm);
                     asyncTaskInsertSchedule.execute();

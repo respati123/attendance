@@ -44,12 +44,12 @@
 
 
     <LinearLayout
-        android:layout_below="@+id/relative"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/linierlayout"
-        android:orientation="vertical"
-        android:background="@drawable/customeborder">
+        android:layout_width="match_parent"
+        android:layout_height="191dp"
+        android:layout_below="@+id/relative"
+        android:background="@drawable/customeborder"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,17 +60,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="17 agustus 2017"
                 android:layout_weight="1"
+                android:text="17 agustus 2017"
+                android:textAllCaps="true"
                 android:textSize="18dp"
-                android:textStyle="bold"
-                android:textAllCaps="true" />
+                android:textStyle="bold" />
 
             <ImageView
+                android:id="@+id/close"
                 android:layout_width="32dp"
                 android:layout_height="25dp"
-                android:src="@mipmap/ic_launcher"
-                android:id="@+id/close"/>
+                android:src="@mipmap/ic_launcher" />
 
 
         </LinearLayout>
@@ -78,13 +78,13 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray" />
 
 
         <LinearLayout
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -97,14 +97,16 @@
                 <TextView
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:text="Name  :"/>
+                    android:text="Name  :" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Respati"/>
+                    android:text="Respati" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,16 +116,24 @@
                 <TextView
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:text="Name  :"/>
+                    android:text="Name  :" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Respati"/>
+                    android:text="Respati" />
 
             </LinearLayout>
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/edit_schedule_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="goToEditForm"
+            android:text="Edit" />
 
     </LinearLayout>
 </RelativeLayout>

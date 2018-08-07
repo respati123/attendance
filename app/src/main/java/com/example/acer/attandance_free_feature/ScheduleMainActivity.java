@@ -223,6 +223,15 @@ public class ScheduleMainActivity extends AppCompatActivity {
         finish();
     }
 
+    public void goToEditForm(){
+        Intent intent = new Intent(this, ScheduleActivity.class);
+
+        //get schedule chosen
+        //put extras
+        //start activity
+
+    }
+
     //    private void prepareMovieData() {
 //
 //        Movie movie = new Movie("Mad Max: Fury Road", "Action & Adventure", "2015");

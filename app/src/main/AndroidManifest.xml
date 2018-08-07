@@ -17,7 +17,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".WelcomeActivity"
-            android:theme="@style/WelcomeScreenTheme" />
+            android:theme="@style/WelcomeScreenTheme">
+        </activity>
         <activity
             android:name=".NavigationDrawerActivity"
             android:label="@string/title_activity_navigation_drawer"
