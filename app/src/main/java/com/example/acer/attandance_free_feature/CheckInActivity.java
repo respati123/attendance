@@ -333,6 +333,8 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
         return false;
     }
 
+    private Absensi insert;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == TAKE_SELFIE_REQUEST && resultCode == RESULT_OK) {
@@ -356,10 +358,18 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
 
             Schedules chosen = mAdapter.getChosenSchedule();
 
-            Absensi insert = new Absensi(userId, df.format(date), dtime.format(date), locGPS.getLatitude(), locGPS.getLongitude(), encodedImage, "Check In", 1);
+            insert = new Absensi(userId, df.format(date), dtime.format(date), locGPS.getLatitude(), locGPS.getLongitude(), encodedImage, "Check In", 1);
             Log.d("TEST", dtime.format(date));
             insert.setId_schedules(chosen.getId());
             wordViewModel.insert(insert);
+
+            Button checkOut = findViewById(R.id.checkOut);
+            checkOut.setVisibility(View.VISIBLE);
+
+            Button checkIn = findViewById(R.id.clockIn);
+            checkIn.setVisibility(View.GONE);
+
+            mRecyclerView.setVisibility(View.GONE);
         }
     }
 
@@ -392,5 +402,17 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
         super.onBackPressed();
         startActivity(new Intent(CheckInActivity.this, MainActivity.class));
         finish();
+    }
+
+    public void checkOut(View view) {
+        
+
+        Button checkOut = findViewById(R.id.checkOut);
+        checkOut.setVisibility(View.GONE);
+
+        Button checkIn = findViewById(R.id.clockIn);
+        checkIn.setVisibility(View.VISIBLE);
+
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 }
