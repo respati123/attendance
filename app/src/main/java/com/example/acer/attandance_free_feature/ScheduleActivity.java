@@ -252,14 +252,12 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
                     if(edit){
                         Schedules schedule = createScheduleObj();
                         wvm.update(schedule);
-                        startActivity(new Intent(ScheduleActivity.this, ScheduleMainActivity.class));
-                        finish();
                     }else{
 //                        AsyncTaskInsertSchedule asyncTaskInsertSchedule = new AsyncTaskInsertSchedule(getValuefromView(), this, btn_save, wvm);
 //                        asyncTaskInsertSchedule.execute();
                         wvm.insert(createScheduleObj());
-                        btn_save.setEnabled(false);
                     }
+                    btn_save.setEnabled(false);
                 }
                 default:
                     break;

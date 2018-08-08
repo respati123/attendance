@@ -363,4 +363,21 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
             startActivityForResult(takeSelfieIntent, TAKE_SELFIE_REQUEST);
         }
     }
+
+    public void reschedule(View view) {
+        Intent intent = new Intent(this, ScheduleActivity.class);
+        Schedules currSchedule = mAdapter.getChosenSchedule();
+        intent.putExtra("date", currSchedule.getDate());
+        intent.putExtra("desc", currSchedule.getDesc());
+        intent.putExtra("user_id", currSchedule.getId_users());
+        intent.putExtra("id", currSchedule.getId());
+        intent.putExtra("job", currSchedule.getJob());
+        intent.putExtra("meet", currSchedule.getMeet());
+        intent.putExtra("name", currSchedule.getName());
+        intent.putExtra("service", currSchedule.getService());
+        intent.putExtra("time", currSchedule.getTime());
+        intent.putExtra("edit", true);
+        //start activity
+        startActivity(intent);
+    }
 }
