@@ -2,6 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
     defaultConfig {
         applicationId "com.example.acer.attandance_free_feature"
         minSdkVersion 19
@@ -48,4 +53,6 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.0'
 
     implementation 'com.vamsi:customcalendar:1.0.0'
+
+    implementation files('libs/jxl.jar')
 }

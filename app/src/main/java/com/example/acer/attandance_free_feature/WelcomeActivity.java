@@ -16,14 +16,14 @@ public class WelcomeActivity extends com.stephentuso.welcome.WelcomeActivity {
                 .defaultTitleTypefacePath("Montserrat-Bold.ttf")
                 .defaultHeaderTypefacePath("Montserrat-Bold.ttf")
                 .defaultBackgroundColor(R.color.colorPrimary)
-                    .page(new TitlePage(R.drawable.ic_launcher_foreground, "Welcome Title Page"))
-                    .page(new BasicPage(R.drawable.ic_launcher_background,
+                    .page(new TitlePage(R.drawable.icon_date, "Welcome Title Page"))
+                    .page(new BasicPage(R.drawable.icon_date,
                         "Welcome1",
                         "Ini page Welcome"))
-                    .page(new BasicPage(R.drawable.ic_launcher_foreground,
+                    .page(new BasicPage(R.drawable.icon_date,
                             "Welcome2",
                             "ini page welcome 2"))
-                    .page(new BasicPage(R.drawable.ic_launcher_foreground,
+                    .page(new BasicPage(R.drawable.icon_date,
                             "Welcome3",
                             "ini page welcome 3"))
                     .swipeToDismiss(true)

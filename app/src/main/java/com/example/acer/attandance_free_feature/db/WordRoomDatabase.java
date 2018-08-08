@@ -71,7 +71,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
             }
 
             for(int j = 1; j <= 5; j++){
-                Absensi absensi = new Absensi(  );
+                Absensi absensi = new Absensi();
                 absensi.id_user = idUser;
                 absensi.id_schedules = 1;
                 absensi.lat = -6.181935;
@@ -83,11 +83,6 @@ public abstract class WordRoomDatabase extends RoomDatabase {
                 absensi.check = 0;
                 mAbsensi.Insert(absensi);
             }
-
-
-
-
-
             return null;
 
         }

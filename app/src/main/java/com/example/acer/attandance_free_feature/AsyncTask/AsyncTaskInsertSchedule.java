@@ -1,5 +1,6 @@
 package com.example.acer.attandance_free_feature.AsyncTask;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -24,15 +25,17 @@ public class AsyncTaskInsertSchedule extends AsyncTask<Void, Void, Void> {
 
     private WordViewModel wmv;
     private Schedules schedules;
+    @SuppressLint("StaticFieldLeak")
     private Context context;
-    ProgressDialog pd;
+    private ProgressDialog pd;
     private Dialog dialog;
+    @SuppressLint("StaticFieldLeak")
     private Button buttonSave;
     private HashMap<String, String> list;
 
-    public AsyncTaskInsertSchedule(HashMap<String, String> list, ScheduleActivity scheduleActivity, Button button, WordViewModel wmv) {
+    public AsyncTaskInsertSchedule(HashMap<String, String> list, Context context, Button button, WordViewModel wmv) {
         this.list = list;
-        this.context = scheduleActivity;
+        this.context = context;
         this.buttonSave = button;
         this.wmv = wmv;
     }
@@ -41,7 +44,6 @@ public class AsyncTaskInsertSchedule extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-
         pd.dismiss();
 
         buttonSave.setEnabled(true);
@@ -49,6 +51,7 @@ public class AsyncTaskInsertSchedule extends AsyncTask<Void, Void, Void> {
         Intent intent = new Intent(context, ScheduleMainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+
     }
 
     @Override
@@ -71,9 +74,6 @@ public class AsyncTaskInsertSchedule extends AsyncTask<Void, Void, Void> {
 
             try {
                 Thread.sleep(1000);
-                if(i == 3){
-                    pd.setMessage("Successfully..");
-                }
                 i++;
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -83,9 +83,11 @@ public class AsyncTaskInsertSchedule extends AsyncTask<Void, Void, Void> {
     }
     @Override
     protected void onPreExecute() {
+        super.onPreExecute();
         pd = new ProgressDialog(context);
         pd.setMessage("loading ....");
         pd.show();
+
     }
 
 }
