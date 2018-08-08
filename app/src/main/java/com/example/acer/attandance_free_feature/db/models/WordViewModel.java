@@ -27,6 +27,7 @@ public class WordViewModel extends AndroidViewModel {
     private LiveData<List<Absensi>> absensiList;
     private LiveData<List<Schedules>> scheduleList;
     private LiveData<List<AbsensiAndSchedule>> absensiAndSchedulesList;
+    private LiveData<List<Schedules>> mGetDataScheduleToday ;
 
     public WordViewModel(Application app){
         super(app);
@@ -38,6 +39,7 @@ public class WordViewModel extends AndroidViewModel {
 
         sr = new ScheduleRepository(app);
         scheduleList = sr.getmGetAllSchedule();
+        mGetDataScheduleToday = sr.getmGetDataToday();
 
 
     }
@@ -51,6 +53,14 @@ public class WordViewModel extends AndroidViewModel {
     }
 
     public void update(Schedules schedule){sr.update(schedule);}
+
+    public void delete(Schedules schedules) {
+        sr.delete(schedules);
+    }
+
+    public LiveData<List<Schedules>> getmGetDataScheduleToday() {
+        return mGetDataScheduleToday;
+    }
 
     //absensi
     public LiveData<List<Absensi>> getAbsensiList() {

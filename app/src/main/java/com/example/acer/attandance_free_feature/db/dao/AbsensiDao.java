@@ -32,5 +32,7 @@ public interface AbsensiDao {
     @Query("SELECT absensi.*, schedule.* FROM absensi INNER JOIN schedule ON absensi.id_schedules = schedule.id_schedule WHERE absensi.ab_date  BETWEEN :from AND :to  ORDER BY ab_date ASC, ab_time ASC")
     LiveData<List<AbsensiAndSchedule>> getAllAbsensiRelationSchedule(String from, String to);
 
+
+
 }
 

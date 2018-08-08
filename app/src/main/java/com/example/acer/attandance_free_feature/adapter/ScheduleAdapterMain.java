@@ -163,5 +163,9 @@ public class ScheduleAdapterMain extends RecyclerView.Adapter<ScheduleAdapterMai
 
         }
     }
+
+    public Schedules getIdForDelete(){
+        return scheduleList.get(expandedPosition);
+    }
 }
 

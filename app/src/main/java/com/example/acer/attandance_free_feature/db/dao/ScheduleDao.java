@@ -27,4 +27,7 @@ public interface ScheduleDao {
     @Update
     void update(Schedules schedules);
 
+    @Query("SELECT * FROM schedule WHERE sc_date = Date() ORDER BY sc_time ASC")
+    LiveData<List<Schedules>> getDataToday();
+
 }

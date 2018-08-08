@@ -126,14 +126,31 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/edit_schedule_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="goToEditForm"
+                    android:text="Edit" />
+
+                <Button
+                    android:id="@+id/delete_schedule_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:onClick="goToDelete"
+                    android:text="Delete" />
+            </LinearLayout>
+
         </LinearLayout>
 
-        <Button
-            android:id="@+id/edit_schedule_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="goToEditForm"
-            android:text="Edit" />
+
 
     </LinearLayout>
 </RelativeLayout>

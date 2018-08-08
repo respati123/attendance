@@ -263,6 +263,16 @@ public class ScheduleMainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goToDelete(View view){
+        Schedules schedules = scheduleAdapterMain.getIdForDelete();
+        Log.d("TEST", ""+schedules.getId());
+
+        wordViewModel.delete(schedules);
+        scheduleAdapterMain.notifyDataSetChanged();
+
+        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
+    }
+
     //    private void prepareMovieData() {
 //
 //        Movie movie = new Movie("Mad Max: Fury Road", "Action & Adventure", "2015");

@@ -109,14 +109,14 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        wordViewModel.getAllSchedule().observe(this, new Observer<List<Schedules>>() {
+        wordViewModel.getmGetDataScheduleToday().observe(this, new Observer<List<Schedules>>() {
             @Override
             public void onChanged(@Nullable List<Schedules> schedules) {
+
                 mAdapter.setSchedule(schedules);
                 mAdapter.notifyDataSetChanged();
             }
         });
-
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -379,5 +379,12 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
         intent.putExtra("edit", true);
         //start activity
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(CheckInActivity.this, MainActivity.class));
+        finish();
     }
 }

@@ -15,13 +15,19 @@ public class ScheduleRepository {
     private ScheduleDao scheduleDao;
 
     private LiveData<List<Schedules>> mGetAllSchedule;
+    private LiveData<List<Schedules>> mGetDataToday;
 
     public ScheduleRepository(Application app){
 
         WordRoomDatabase db = WordRoomDatabase.getDatabase(app);
         scheduleDao = db.ScheduleDao();
         mGetAllSchedule = scheduleDao.getAllSchedule();
+        mGetDataToday = scheduleDao.getDataToday();
 
+    }
+
+    public LiveData<List<Schedules>> getmGetDataToday() {
+        return mGetDataToday;
     }
 
     public LiveData<List<Schedules>> getmGetAllSchedule() {
@@ -32,6 +38,9 @@ public class ScheduleRepository {
         new InsertAsyncTaskSchedule(scheduleDao).execute(schedules);
     }
 
+    public void delete(Schedules schedules){
+        new deleteAsyncTaskSchedule(scheduleDao).execute(schedules);
+    }
     public void update(Schedules schedule){
         new UpdateAsyncTaskSchedule(scheduleDao).execute(schedule);
     }
@@ -61,6 +70,21 @@ public class ScheduleRepository {
         @Override
         protected Void doInBackground(Schedules... schedules) {
             mDao.update(schedules[0]);
+            return null;
+        }
+    }
+
+    private class deleteAsyncTaskSchedule extends AsyncTask<Schedules, Void, Void>{
+
+        private ScheduleDao mscheduleDao;
+
+        public deleteAsyncTaskSchedule(ScheduleDao scheduleDao) {
+            mscheduleDao = scheduleDao;
+        }
+
+        @Override
+        protected Void doInBackground(Schedules... schedules) {
+            mscheduleDao.delete(schedules[0]);
             return null;
         }
     }
