@@ -252,6 +252,7 @@ public class ScheduleActivity extends AppCompatActivity implements View.OnClickL
                     if(edit){
                         Schedules schedule = createScheduleObj();
                         wvm.update(schedule);
+                        finish();
                     }else{
                         AsyncTaskInsertSchedule asyncTaskInsertSchedule = new AsyncTaskInsertSchedule(getValuefromView(), this, btn_save, wvm);
                         asyncTaskInsertSchedule.execute();

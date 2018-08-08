@@ -118,6 +118,15 @@ public class ExportActivity extends AppCompatActivity  {
         final String from   = edt_from.getText().toString();
         final String to     = edt_to.getText().toString();
 
+//        wordViewModel.getAbsensiList().observe(this, new Observer<List<Absensi>>() {
+//            @Override
+//            public void onChanged(@Nullable List<Absensi> absensis) {
+//                Log.d("TEST","hasil selurush absen" + absensis.get(6).getDate());
+//                exportAdapter.setAbensi(absensis);
+//                exportAdapter.notifyDataSetChanged();
+//            }
+//        });
+
         wordViewModel.getAbsensiAndSchedulesList(from, to).observe(this, new Observer<List<AbsensiAndSchedule>>() {
             @Override
             public void onChanged(@Nullable List<AbsensiAndSchedule> absensiAndSchedules) {

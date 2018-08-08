@@ -41,12 +41,15 @@ import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.time.*;
 import java.util.List;
+import java.util.SimpleTimeZone;
 
 public class CheckInActivity extends AppCompatActivity implements MapEventsReceiver{
 
@@ -344,14 +347,17 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
 
             Log.i("Action", "Clock In");
             String url = "http://10.0.2.2:3000/clockIns";
-            DateFormat df = new SimpleDateFormat();
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat dtime = new SimpleDateFormat("HH:mm:ss");
             Date date = new Date();
+
 
             Log.i("Action", encodedImage);
 
             Schedules chosen = mAdapter.getChosenSchedule();
 
-            Absensi insert = new Absensi(userId, date.toString(), locGPS.getLatitude(), locGPS.getLongitude(), encodedImage, "Check In");
+            Absensi insert = new Absensi(userId, df.format(date), dtime.format(date), locGPS.getLatitude(), locGPS.getLongitude(), encodedImage, "Check In", 1);
+            Log.d("TEST", dtime.format(date));
             insert.setId_schedules(chosen.getId());
             wordViewModel.insert(insert);
         }

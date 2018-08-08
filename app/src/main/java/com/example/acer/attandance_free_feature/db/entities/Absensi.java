@@ -25,13 +25,15 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class Absensi {
 
 
-    public Absensi(int id_user, String time, Double lat, Double lon, String image, String type){
+    public Absensi(int id_user, String date, String time, Double lat, Double lon, String image, String type, int check){
         this.id_user = id_user;
         this.time = time;
+        this.date = date;
         this.lat = lat;
         this.lon = lon;
         this.image = image;
         this.type = type;
+        this.check = check;
     }
     public Absensi(){}
     @PrimaryKey(autoGenerate = true)
@@ -62,6 +64,9 @@ public class Absensi {
 
     @ColumnInfo(name = "type")
     public String type;
+
+    @ColumnInfo(name = "check")
+    public int check;
 
 
     @NonNull
@@ -99,6 +104,14 @@ public class Absensi {
 
     public String getDate() {
         return date;
+    }
+
+    public int getCheck() {
+        return check;
+    }
+
+    public void setCheck(int check) {
+        this.check = check;
     }
 
     public void setId(@NonNull int id) {

@@ -23,6 +23,7 @@ public class ExportAdapter extends RecyclerView.Adapter<ExportAdapter.MyViewHold
 
     private final LayoutInflater inflater;
     private List<AbsensiAndSchedule> absensiAndScheduleList;
+    private List<Absensi> absensiList;
 
 
     public ExportAdapter(Context ctx){
@@ -38,6 +39,8 @@ public class ExportAdapter extends RecyclerView.Adapter<ExportAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ExportAdapter.MyViewHolder holder, int position) {
+
+
         if(absensiAndScheduleList != null){
             Absensi absensi = absensiAndScheduleList.get(position).getAbsensi();
             Schedules schedules = absensiAndScheduleList.get(position).getSchedules();
@@ -47,15 +50,32 @@ public class ExportAdapter extends RecyclerView.Adapter<ExportAdapter.MyViewHold
             holder.tanggal.setText(absensi.getDate());
             holder.time.setText(absensi.getTime());
 
+        } else if(absensiList != null){
+            Absensi absensi = absensiList.get(position);
+            holder.client_name.setText("Client :" + absensi.getId());
+            holder.type.setText("Type :" + absensi.getType());
+            holder.tanggal.setText(absensi.getDate());
+            holder.time.setText(absensi.getTime());
         }
     }
 
     @Override
     public int getItemCount() {
-        if(absensiAndScheduleList != null){
+        if(absensiList != null){
+            return absensiList.size();
+
+        } else if(absensiAndScheduleList != null){
+
             return absensiAndScheduleList.size();
+
+        } else {
+
+            return 0;
         }
-        return 0;
+    }
+
+    public List<Absensi> setAbensi(List<Absensi> abensi) {
+        return absensiList = abensi;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

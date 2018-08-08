@@ -19,7 +19,7 @@ import com.example.acer.attandance_free_feature.db.entities.Users;
 import com.example.acer.attandance_free_feature.db.entities.Words;
 
 
-@Database(entities = {Words.class, Users.class, Absensi.class, Schedules.class}, version = 2)
+@Database(entities = {Words.class, Users.class, Absensi.class, Schedules.class}, version = 3)
 public abstract class WordRoomDatabase extends RoomDatabase {
 
     private static WordRoomDatabase INSTANCE;
@@ -80,6 +80,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
                 absensi.date = "2018-08-0"+j;
                 absensi.image = "respati"+j;
                 absensi.type = "checkin";
+                absensi.check = 0;
                 mAbsensi.Insert(absensi);
             }
 
