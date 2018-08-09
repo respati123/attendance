@@ -19,7 +19,7 @@ import com.example.acer.attandance_free_feature.db.entities.Users;
 import com.example.acer.attandance_free_feature.db.entities.Words;
 
 
-@Database(entities = {Words.class, Users.class, Absensi.class, Schedules.class}, version = 3)
+@Database(entities = {Words.class, Users.class, Absensi.class, Schedules.class}, version = 4)
 public abstract class WordRoomDatabase extends RoomDatabase {
 
     private static WordRoomDatabase INSTANCE;
@@ -56,33 +56,33 @@ public abstract class WordRoomDatabase extends RoomDatabase {
             word = new Words("World");
             mDao.insert(word);
 
-            int idUser = mUsers.getUsers().getId();
-
-            Schedules schedules = new Schedules();
-            for(int i = 0; i <= 3; i++){
-                schedules.id_users = idUser;
-                schedules.date = "2009-0" + i + "-15";
-                schedules.time = "13:45:3"+i;
-                schedules.desc = "meeting baru"+i;
-                schedules.meet = "Imah"+i;
-                schedules.client_name = "clozzet"+i;
-                mSchedule.insert(schedules);
-
-            }
-
-            for(int j = 1; j <= 5; j++){
-                Absensi absensi = new Absensi();
-                absensi.id_user = idUser;
-                absensi.id_schedules = 1;
-                absensi.lat = -6.181935;
-                absensi.lon = 106.8031835;
-                absensi.time = "0"+j+":05:46";
-                absensi.date = "2018-08-0"+j;
-                absensi.image = "respati"+j;
-                absensi.type = "checkin";
-                absensi.check = 0;
-                mAbsensi.Insert(absensi);
-            }
+//            int idUser = mUsers.getUsers().getId();
+//
+//            Schedules schedules = new Schedules();
+//            for(int i = 0; i <= 3; i++){
+//                schedules.id_users = idUser;
+//                schedules.date = "2009-0" + i + "-15";
+//                schedules.time = "13:45:3"+i;
+//                schedules.desc = "meeting baru"+i;
+//                schedules.meet = "Imah"+i;
+//                schedules.client_name = "clozzet"+i;
+//                mSchedule.insert(schedules);
+//
+//            }
+//
+//            for(int j = 1; j <= 5; j++){
+//                Absensi absensi = new Absensi();
+//                absensi.id_user = idUser;
+//                absensi.id_schedules = 1;
+//                absensi.lat = -6.181935;
+//                absensi.lon = 106.8031835;
+//                absensi.time = "0"+j+":05:46";
+//                absensi.date = "2018-08-0"+j;
+//                absensi.image = "respati"+j;
+//                absensi.type = "checkin";
+//                absensi.check = 0;
+//                mAbsensi.Insert(absensi);
+//            }
             return null;
 
         }

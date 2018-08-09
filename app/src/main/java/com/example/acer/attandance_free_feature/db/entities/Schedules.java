@@ -50,7 +50,7 @@ Schedules {
     public String desc;
 
     @ColumnInfo(name = "checked_in")
-    public boolean checked_in;
+    public boolean checked_in = false;
 
     public String getTime() {
         return time;

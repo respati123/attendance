@@ -11,12 +11,13 @@ import android.widget.TextView;
 
 import com.example.acer.attandance_free_feature.db.entities.Schedules;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ScheduleViewAdapter extends RecyclerView.Adapter<ScheduleViewAdapter.ScheduleViewHolder> {
     private final LayoutInflater inflater;
     private List<Schedules> scheduleList;
-    private int expandedPosition;
+    private int expandedPosition = -1;
 
     ScheduleViewAdapter(Context ctx){inflater = LayoutInflater.from(ctx);}
 
@@ -31,13 +32,17 @@ public class ScheduleViewAdapter extends RecyclerView.Adapter<ScheduleViewAdapte
     public void onBindViewHolder(@NonNull ScheduleViewHolder holder, int position) {
         final boolean isExpanded = position == expandedPosition;
         final int currPosition = position;
-        Log.i("TEST", String.valueOf(scheduleList.size()));
+        //Log.i("TEST", String.valueOf(scheduleList.size()));
 
         if(scheduleList != null){
-            Schedules currSchedule = scheduleList.get(position);
-            holder.details.setText(currSchedule.getDesc());
-            holder.clientName.setText(currSchedule.getName());
-            holder.repName.setText(currSchedule.getMeet());
+            if(!scheduleList.get(position).isChecked_in()){
+                Schedules currSchedule = scheduleList.get(position);
+                holder.details.setText(currSchedule.getDesc());
+                holder.clientName.setText(currSchedule.getName());
+                holder.repName.setText(currSchedule.getMeet());
+            }else{
+
+            }
         }else{
             holder.details.setText("No schedule");
         }
@@ -55,7 +60,13 @@ public class ScheduleViewAdapter extends RecyclerView.Adapter<ScheduleViewAdapte
     }
 
     public void setSchedule(List<Schedules> schedule){
-        this.scheduleList = schedule;
+        this.scheduleList = new ArrayList<Schedules>();
+        // = schedule;
+        for (Schedules i:schedule) {
+            if(!i.isChecked_in()){
+                scheduleList.add(i);
+            }
+        }
     }
 
     @Override
@@ -68,6 +79,14 @@ public class ScheduleViewAdapter extends RecyclerView.Adapter<ScheduleViewAdapte
 
     public Schedules getChosenSchedule(){
         return scheduleList.get(expandedPosition);
+    }
+
+    public boolean checkChosen(){
+        Log.i("TEST", String.valueOf(expandedPosition));
+        if(expandedPosition == -1){
+            return false;
+        }
+        return true;
     }
 
     public class ScheduleViewHolder extends RecyclerView.ViewHolder {

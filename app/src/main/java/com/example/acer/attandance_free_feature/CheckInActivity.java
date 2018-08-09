@@ -311,8 +311,11 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
 //        CacheManager cm = new CacheManager(map);
 //        cm.downloadAreaAsync(this, points, 5, 19 );
 
-        takeSelfie();
-
+        if(mAdapter.checkChosen()){
+            takeSelfie();
+        }else{
+            return;
+        }
     }
 
     public void center(View view) {
@@ -412,11 +415,17 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
         insert.setTime(dtime.format(date));
         wordViewModel.insert(insert);
 
+        Schedules schedules = mAdapter.getChosenSchedule();
+        schedules.setChecked_in(true);
+        wordViewModel.update(schedules);
+
         Button checkOut = findViewById(R.id.checkOut);
         checkOut.setVisibility(View.GONE);
 
         Button checkIn = findViewById(R.id.clockIn);
         checkIn.setVisibility(View.VISIBLE);
+
+        mAdapter.notifyDataSetChanged();
 
         mRecyclerView.setVisibility(View.VISIBLE);
     }
