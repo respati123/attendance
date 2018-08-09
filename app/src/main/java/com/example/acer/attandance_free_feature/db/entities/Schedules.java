@@ -49,6 +49,9 @@ Schedules {
     @ColumnInfo(name = "description")
     public String desc;
 
+    @ColumnInfo(name = "checked_in")
+    public boolean checked_in;
+
     public String getTime() {
         return time;
     }
@@ -120,5 +123,21 @@ Schedules {
 
     public void setId_users(int id_users) {
         this.id_users = id_users;
+    }
+
+    public String getClient_name() {
+        return client_name;
+    }
+
+    public void setClient_name(String client_name) {
+        this.client_name = client_name;
+    }
+
+    public boolean isChecked_in() {
+        return checked_in;
+    }
+
+    public void setChecked_in(boolean checked_in) {
+        this.checked_in = checked_in;
     }
 }

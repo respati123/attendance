@@ -50,8 +50,12 @@ public class Absensi {
     @ColumnInfo(name = "ab_time")
     public String time;
 
+    @ColumnInfo(name = "ab_out_time")
+    public String out_time;
+
     @ColumnInfo(name = "ab_date")
     public String date;
+
 
     @ColumnInfo(name = "lat")
     public Double lat;
@@ -96,6 +100,14 @@ public class Absensi {
 
     public String getTime() {
         return time;
+    }
+
+    public String getOut_time() {
+        return out_time;
+    }
+
+    public void setOut_time(String out_time) {
+        this.out_time = out_time;
     }
 
     public String getType() {

@@ -361,6 +361,7 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
             insert = new Absensi(userId, df.format(date), dtime.format(date), locGPS.getLatitude(), locGPS.getLongitude(), encodedImage, "Check In", 1);
             Log.d("TEST", dtime.format(date));
             insert.setId_schedules(chosen.getId());
+            //remove this
             wordViewModel.insert(insert);
 
             Button checkOut = findViewById(R.id.checkOut);
@@ -405,7 +406,11 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
     }
 
     public void checkOut(View view) {
-        
+        SimpleDateFormat dtime = new SimpleDateFormat("HH:mm:ss");
+        Date date = new Date();
+
+        insert.setTime(dtime.format(date));
+        wordViewModel.insert(insert);
 
         Button checkOut = findViewById(R.id.checkOut);
         checkOut.setVisibility(View.GONE);
