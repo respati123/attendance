@@ -19,7 +19,7 @@ import com.example.acer.attandance_free_feature.db.entities.Users;
 import com.example.acer.attandance_free_feature.db.entities.Words;
 
 
-@Database(entities = {Words.class, Users.class, Absensi.class, Schedules.class}, version = 4)
+@Database(entities = {Words.class, Users.class, Absensi.class, Schedules.class}, version = 5)
 public abstract class WordRoomDatabase extends RoomDatabase {
 
     private static WordRoomDatabase INSTANCE;

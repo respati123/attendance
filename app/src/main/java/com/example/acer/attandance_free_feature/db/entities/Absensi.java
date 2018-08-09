@@ -72,6 +72,12 @@ public class Absensi {
     @ColumnInfo(name = "check")
     public int check;
 
+    @ColumnInfo(name = "checkout_lat")
+    private Double checkout_lat;
+
+    @ColumnInfo(name = "checkout_lon")
+    private Double checkout_lon;
+
 
     @NonNull
     public int getId() {
@@ -160,5 +166,21 @@ public class Absensi {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public Double getCheckout_lat() {
+        return checkout_lat;
+    }
+
+    public void setCheckout_lat(Double checkout_lat) {
+        this.checkout_lat = checkout_lat;
+    }
+
+    public Double getCheckout_lon() {
+        return checkout_lon;
+    }
+
+    public void setCheckout_lon(Double checkout_lon) {
+        this.checkout_lon = checkout_lon;
     }
 }

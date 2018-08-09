@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -39,6 +40,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Polygon;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Time;
@@ -66,10 +68,14 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
     private LocationListener locationListener;
     private IMapController mapController;
     private Marker userPos;
+    private Marker lastCheckIn;
     private Button clockIn;
     private int userId = 1;
+
     private String test;
     private String encodedImage;
+
+    private Polygon circle;
 
     static final int TAKE_SELFIE_REQUEST = 1;
     private WordViewModel wordViewModel;
@@ -361,11 +367,25 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
 
             Schedules chosen = mAdapter.getChosenSchedule();
 
-            insert = new Absensi(userId, df.format(date), dtime.format(date), locGPS.getLatitude(), locGPS.getLongitude(), encodedImage, "Check In", 1);
+            insert = new Absensi(userId, df.format(date), dtime.format(date), user.getLatitude(), user.getLongitude(), encodedImage, "Check In", 1);
             Log.d("TEST", dtime.format(date));
             insert.setId_schedules(chosen.getId());
             //remove this
             wordViewModel.insert(insert);
+
+            lastCheckIn = new Marker(map);
+            lastCheckIn.setPosition(user);
+            lastCheckIn.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            map.getOverlays().add(lastCheckIn);
+
+            circle = new Polygon();
+            circle.setPoints(Polygon.pointsAsCircle(user, 300));
+            circle.setFillColor(0x12121212);
+            circle.setStrokeColor(Color.RED);
+            circle.setStrokeWidth(2);
+            map.getOverlays().add(circle);
+
+            map.invalidate();
 
             Button checkOut = findViewById(R.id.checkOut);
             checkOut.setVisibility(View.VISIBLE);
@@ -413,6 +433,9 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
         Date date = new Date();
 
         insert.setTime(dtime.format(date));
+        insert.setCheckout_lat(user.getLatitude());
+        insert.setCheckout_lon(user.getLongitude());
+
         wordViewModel.insert(insert);
 
         Schedules schedules = mAdapter.getChosenSchedule();
@@ -424,6 +447,9 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
 
         Button checkIn = findViewById(R.id.clockIn);
         checkIn.setVisibility(View.VISIBLE);
+
+        map.getOverlays().remove(lastCheckIn);
+        map.getOverlays().remove(circle);
 
         mAdapter.notifyDataSetChanged();
 
