@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ScheduleViewAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    boolean doubleBackToExitPressedOnce = false;
 
 
     @Override
@@ -290,5 +292,24 @@ public class MainActivity extends AppCompatActivity {
     public void goToExport(View view){
         startActivity(new Intent(MainActivity.this, ExportActivity.class));
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if(doubleBackToExitPressedOnce){
+
+            super.finish();
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please Click Back again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
 }

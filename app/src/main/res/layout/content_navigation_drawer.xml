@@ -8,35 +8,35 @@
     tools:context=".NavigationDrawerActivity"
     tools:showIn="@layout/app_bar_navigation_drawer">
 
-    <Button
+    <ImageButton
         android:id="@+id/gotoCheckIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="107dp"
+        android:layout_marginTop="52dp"
+        android:background="@mipmap/icon_checkin_main_foreground"
         android:onClick="goToCheckIn"
         android:text="Check In"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/goToSchedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:background="@mipmap/icon_schedule_main_foreground"
         android:onClick="goToSchedule"
-        android:text="Schedule"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gotoCheckIn" />
 
-    <Button
+    <ImageButton
         android:id="@+id/goToExport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="116dp"
         android:onClick="goToExport"
-        android:text="Export To Excel"
+        android:background="@mipmap/ic_report_foreground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gotoCheckIn" />
