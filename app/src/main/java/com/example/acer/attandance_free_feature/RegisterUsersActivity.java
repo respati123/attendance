@@ -91,7 +91,7 @@ public class RegisterUsersActivity extends AppCompatActivity implements View.OnC
                       LoadingAsyncTask loadingAsyncTask = new LoadingAsyncTask(this, buttonSave, wordViewModel, username, name);
                       loadingAsyncTask.execute();
                       buttonSave.setEnabled(false);
-
+                      finish();
 
                 } else {
 
