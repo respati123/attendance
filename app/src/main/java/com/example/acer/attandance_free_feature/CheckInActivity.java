@@ -424,13 +424,18 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(CheckInActivity.this, MainActivity.class));
+        //startActivity(new Intent(CheckInActivity.this, MainActivity.class));
         finish();
     }
 
     public void checkOut(View view) {
         SimpleDateFormat dtime = new SimpleDateFormat("HH:mm:ss");
         Date date = new Date();
+
+        GeoPoint lastCI = lastCheckIn.getPosition();
+        if(lastCI.distanceToAsDouble(user) > 300){
+            //do something
+        }
 
         insert.setTime(dtime.format(date));
         insert.setCheckout_lat(user.getLatitude());
