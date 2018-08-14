@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
             if(!externalStoragePermission) return;
         }
 
-        Intent intent = new Intent(this, CheckInActivity.class);
+        Intent intent = new Intent(this, OfficeCheckIn.class);
         startActivity(intent);
     }
 
@@ -314,4 +314,3 @@ public class MainActivity extends AppCompatActivity {
         }, 2000);
     }
 }
-

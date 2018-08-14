@@ -17,18 +17,17 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".WelcomeActivity"
-            android:theme="@style/WelcomeScreenTheme">
-        </activity>
+            android:theme="@style/WelcomeScreenTheme"></activity>
         <activity
             android:name=".NavigationDrawerActivity"
             android:label="@string/title_activity_navigation_drawer"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".RegisterUsersActivity"
-            android:label="RegisterUserActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:excludeFromRecents="true"
-            android:noHistory = "true">
+            android:label="RegisterUserActivity"
+            android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
 
@@ -37,10 +36,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:excludeFromRecents="true">
-
-        </activity>
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -55,17 +52,19 @@
 
         <activity
             android:name=".ScheduleActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".ScheduleMainActivity"
             android:label="@string/title_activity_schedule_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CalendarActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <activity android:name=".ExportActivity">
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".ExportActivity"></activity>
+        <activity
+            android:name=".OfficeCheckIn"
+            android:label="@string/title_activity_office_check_in"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

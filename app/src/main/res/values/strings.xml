@@ -14,4 +14,5 @@
     <string name="data_lokal">Local Data</string>
     <string name="form_schedule">Schedule</string>
     <string name="title_activity_schedule_main">ScheduleMainActivity</string>
+    <string name="title_activity_office_check_in">OfficeCheckIn</string>
 </resources>
