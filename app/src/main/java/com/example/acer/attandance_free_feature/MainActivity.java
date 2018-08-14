@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(
                     this,
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    1
+                    2
             );
         }
 
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(
                     this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    1
+                    3
             );
         }
 
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                finish();
+                //finish();
             }
         });
     }
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(
                     this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    1
+                    2
             );
             if(!externalStoragePermission) return;
         }
@@ -286,12 +286,13 @@ public class MainActivity extends AppCompatActivity {
     public void goToSchedule(View view){
 
         startActivity(new Intent(MainActivity.this, ScheduleMainActivity.class));
-        finish();
+        //finish();
     }
+
 
     public void goToExport(View view){
         startActivity(new Intent(MainActivity.this, ExportActivity.class));
-        finish();
+        //finish();
     }
 
     @Override
@@ -313,3 +314,4 @@ public class MainActivity extends AppCompatActivity {
         }, 2000);
     }
 }
+

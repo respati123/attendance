@@ -59,9 +59,9 @@ public class LoadingAsyncTask extends AsyncTask<Void, Void, Void> {
         btn.setEnabled(true);
         pd.dismiss();
 
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+//        Intent intent = new Intent(context, MainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        context.startActivity(intent);
     }
 
     @Override
