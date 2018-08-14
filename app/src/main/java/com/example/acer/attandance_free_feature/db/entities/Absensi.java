@@ -56,7 +56,6 @@ public class Absensi {
     @ColumnInfo(name = "ab_date")
     public String date;
 
-
     @ColumnInfo(name = "lat")
     public Double lat;
 

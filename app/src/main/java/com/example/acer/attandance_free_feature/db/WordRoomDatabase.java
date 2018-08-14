@@ -9,17 +9,19 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.example.acer.attandance_free_feature.db.dao.AbsensiDao;
+import com.example.acer.attandance_free_feature.db.dao.AbsensiOfficeDao;
 import com.example.acer.attandance_free_feature.db.dao.ScheduleDao;
 import com.example.acer.attandance_free_feature.db.dao.UsersDao;
 import com.example.acer.attandance_free_feature.db.dao.WordsDao;
 import com.example.acer.attandance_free_feature.db.entities.Absensi;
 import com.example.acer.attandance_free_feature.db.entities.AbsensiAndSchedule;
+import com.example.acer.attandance_free_feature.db.entities.AbsensiOffice;
 import com.example.acer.attandance_free_feature.db.entities.Schedules;
 import com.example.acer.attandance_free_feature.db.entities.Users;
 import com.example.acer.attandance_free_feature.db.entities.Words;
 
 
-@Database(entities = {Words.class, Users.class, Absensi.class, Schedules.class}, version = 5)
+@Database(entities = {Words.class, Users.class, Absensi.class, Schedules.class, AbsensiOffice.class}, version = 6)
 public abstract class WordRoomDatabase extends RoomDatabase {
 
     private static WordRoomDatabase INSTANCE;
@@ -40,12 +42,14 @@ public abstract class WordRoomDatabase extends RoomDatabase {
         private final AbsensiDao mAbsensi;
         private final UsersDao mUsers;
         private final ScheduleDao mSchedule;
+        private final AbsensiOfficeDao mAbsensiOffice;
 
         PopulateDbAsync(WordRoomDatabase db) {
             mDao = db.wordsDao();
             mAbsensi = db.AbsensiDao();
             mUsers = db.usersDao();
             mSchedule = db.ScheduleDao();
+            mAbsensiOffice = db.AbsensiOfficeDao();
         }
 
         @Override
@@ -108,6 +112,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
     public abstract UsersDao usersDao();
     public abstract AbsensiDao AbsensiDao();
     public abstract ScheduleDao ScheduleDao();
+    public abstract AbsensiOfficeDao AbsensiOfficeDao();
 
 
 }

@@ -8,8 +8,10 @@ import android.arch.lifecycle.LiveData;
 import com.example.acer.attandance_free_feature.db.dao.UsersDao;
 import com.example.acer.attandance_free_feature.db.entities.Absensi;
 import com.example.acer.attandance_free_feature.db.entities.AbsensiAndSchedule;
+import com.example.acer.attandance_free_feature.db.entities.AbsensiOffice;
 import com.example.acer.attandance_free_feature.db.entities.Schedules;
 import com.example.acer.attandance_free_feature.db.entities.Users;
+import com.example.acer.attandance_free_feature.db.repositories.AbsensiOfficeRepository;
 import com.example.acer.attandance_free_feature.db.repositories.AbsensiRepository;
 import com.example.acer.attandance_free_feature.db.repositories.ScheduleRepository;
 import com.example.acer.attandance_free_feature.db.repositories.UserRepository;
@@ -22,12 +24,14 @@ public class WordViewModel extends AndroidViewModel {
     private UserRepository ur;
     private AbsensiRepository ar;
     private ScheduleRepository sr;
+    private AbsensiOfficeRepository aro;
 
     private LiveData<List<Users>> userList;
     private LiveData<List<Absensi>> absensiList;
     private LiveData<List<Schedules>> scheduleList;
     private LiveData<List<AbsensiAndSchedule>> absensiAndSchedulesList;
     private LiveData<List<Schedules>> mGetDataScheduleToday ;
+    private LiveData<List<AbsensiOffice>> mGetAllDataAbsensiOffice ;
 
     public WordViewModel(Application app){
         super(app);
@@ -41,8 +45,22 @@ public class WordViewModel extends AndroidViewModel {
         scheduleList = sr.getmGetAllSchedule();
         mGetDataScheduleToday = sr.getmGetDataToday();
 
+        aro = new AbsensiOfficeRepository(app);
+        mGetAllDataAbsensiOffice = aro.getmGetAllAbsensiOffice();
 
     }
+
+    //absensiOffice
+
+
+    public LiveData<List<AbsensiOffice>> getmGetAllDataAbsensiOffice() {
+        return mGetAllDataAbsensiOffice;
+    }
+
+    public void insert(AbsensiOffice absensiOffice){
+        aro.insert(absensiOffice);
+    }
+
     //schedule
     public LiveData<List<Schedules>> getAllSchedule() {
         return scheduleList;
