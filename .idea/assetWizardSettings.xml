@@ -69,8 +69,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundLayerName" value="ic_launcher_background" />
-                                      <entry key="foregroundImage" value="D:\logo\reporting logo.png" />
-                                      <entry key="outputName" value="ic_report" />
+                                      <entry key="foregroundImage" value="D:\logo\quantumhrlogo.png" />
+                                      <entry key="outputName" value="icon_logo" />
                                     </map>
                                   </option>
                                 </PersistentState>
