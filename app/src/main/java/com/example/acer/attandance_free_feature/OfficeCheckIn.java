@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.acer.attandance_free_feature.db.entities.Absensi;
+import com.example.acer.attandance_free_feature.db.entities.AbsensiOffice;
 import com.example.acer.attandance_free_feature.db.entities.Schedules;
 import com.example.acer.attandance_free_feature.db.models.WordViewModel;
 
@@ -250,7 +251,7 @@ public class OfficeCheckIn extends AppCompatActivity {
 //        return false;
 //    }
 
-    private Absensi insert;
+    private AbsensiOffice insert;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -270,9 +271,8 @@ public class OfficeCheckIn extends AppCompatActivity {
 
             Log.i("Action", encodedImage);
 
-            insert = new Absensi(userId, df.format(date), dtime.format(date), user.getLatitude(), user.getLongitude(), encodedImage, "Check In", 1);
+            insert = new AbsensiOffice(userId, df.format(date), dtime.format(date), user.getLatitude(), user.getLongitude(), encodedImage, "Check In", "1");
             Log.d("TEST", dtime.format(date));
-            insert.setId_schedules(1);
             //remove this
             wordViewModel.insert(insert);
 
@@ -305,7 +305,7 @@ public class OfficeCheckIn extends AppCompatActivity {
         Date date = new Date();
 
         if(user.distanceToAsDouble(office) <= 100){
-            insert.setTime(dtime.format(date));
+            insert.setOut_time(dtime.format(date));
             insert.setCheckout_lat(user.getLatitude());
             insert.setCheckout_lon(user.getLongitude());
 

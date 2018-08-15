@@ -437,7 +437,7 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
             //do something
         }
 
-        insert.setTime(dtime.format(date));
+        insert.setOut_time(dtime.format(date));
         insert.setCheckout_lat(user.getLatitude());
         insert.setCheckout_lon(user.getLongitude());
 

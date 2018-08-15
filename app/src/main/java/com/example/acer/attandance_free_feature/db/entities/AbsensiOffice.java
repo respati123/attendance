@@ -33,6 +33,19 @@ public class AbsensiOffice {
         this.check = check;
     }
 
+    public AbsensiOffice(int id_user, String time,String date,
+                         Double lat,Double lon,String image, String type, String check){
+
+        this.id_user = id_user;
+        this.time = time;
+        this.date = date;
+        this.lat = lat;
+        this.lon = lon;
+        this.image = image;
+        this.type = type;
+        this.check = check;
+    }
+
     @PrimaryKey(autoGenerate = true)
     @NonNull
     @ColumnInfo(name = "id")
