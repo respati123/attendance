@@ -156,11 +156,11 @@ public class MainActivity extends AppCompatActivity {
                         image = user.getImage();
 
                         if(image != null) {
-                            nameToolbar.setText(name);
                             decodeStringToBitmap decodeStringToBitmap = new decodeStringToBitmap(image);
                             Bitmap imageBitmap = decodeStringToBitmap.decode();
                             toolbarPic.setImageBitmap(imageBitmap);
                         }
+                        nameToolbar.setText(name);
 
                     }
                 }

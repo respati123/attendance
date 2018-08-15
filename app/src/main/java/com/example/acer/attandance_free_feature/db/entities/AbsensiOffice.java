@@ -16,22 +16,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
         })
 public class AbsensiOffice {
 
-    public AbsensiOffice(int id_user, String time,String out_time,String date,
-                         Double lat,Double lon,String image, String type,Double checkout_lat,
-                         Double checkout_lon, String check){
 
-        this.id_user = id_user;
-        this.time = time;
-        this.out_time = out_time;
-        this.date = date;
-        this.lat = lat;
-        this.lon = lon;
-        this.image = image;
-        this.type = type;
-        this.checkout_lat = checkout_lat;
-        this.checkout_lon = checkout_lon;
-        this.check = check;
-    }
 
     public AbsensiOffice(int id_user, String time,String date,
                          Double lat,Double lon,String image, String type, String check){
