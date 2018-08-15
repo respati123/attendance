@@ -56,6 +56,7 @@ public class OfficeCheckIn extends AppCompatActivity {
     private MapView map = null;
     private Location locGPS;
     private LocationManager locationManager;
+    private LocationManager locationManagerNetwork;
     private ArrayList<GeoPoint> points;
     private ArrayList<Double> distances;
     private double minDistance = -1;
@@ -117,6 +118,7 @@ public class OfficeCheckIn extends AppCompatActivity {
         clockIn = findViewById(R.id.clockIn);
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManagerNetwork = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         locGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
@@ -152,6 +154,7 @@ public class OfficeCheckIn extends AppCompatActivity {
         };
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 25, locationListener);
+        locationManagerNetwork.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 25, locationListener);
 
         mapController = map.getController();
         mapController.setZoom(19.0);
@@ -220,6 +223,7 @@ public class OfficeCheckIn extends AppCompatActivity {
     public void OnPause(){
         super.onPause();
         map.onPause();
+        //locationManager.removeUpdates(locationListener);
     }
 
     public void checkIn(View view) {
