@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -12,6 +13,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -27,6 +29,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.acer.attandance_free_feature.db.entities.Absensi;
 import com.example.acer.attandance_free_feature.db.entities.AbsensiOffice;
@@ -42,6 +46,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polygon;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
@@ -49,6 +54,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class OfficeCheckIn extends AppCompatActivity {
 
@@ -79,6 +85,18 @@ public class OfficeCheckIn extends AppCompatActivity {
     static final int TAKE_SELFIE_REQUEST = 1;
     private WordViewModel wordViewModel;
 
+    private CountDownTimer mCountDownTimer;
+    private long START_MILLIS = 28800000;
+    private boolean mTimerRunning;
+    private long mMillisLeft = START_MILLIS;
+    private boolean isCheckIn;
+    private long endTime;
+
+
+    private Button btnCheckIn;
+    private Button btnCheckOut;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +104,10 @@ public class OfficeCheckIn extends AppCompatActivity {
         org.osmdroid.config.Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
         setContentView(R.layout.activity_office_check_in);
+
+        //initialize
+        btnCheckIn = findViewById(R.id.checkIn);
+        btnCheckOut = findViewById(R.id.checkOut);
 
         //Permission Check
         boolean fineLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
@@ -114,14 +136,12 @@ public class OfficeCheckIn extends AppCompatActivity {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
-        clockIn = findViewById(R.id.clockIn);
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         locGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         locationListener = new LocationListener() {
-            private Button clockIn = findViewById(R.id.clockIn);
 
             @Override
             public void onLocationChanged(Location location) {
@@ -156,9 +176,8 @@ public class OfficeCheckIn extends AppCompatActivity {
         mapController = map.getController();
         mapController.setZoom(19.0);
         user = new GeoPoint(locGPS.getLatitude(), locGPS.getLongitude());
-        mapController.setCenter(user);
 
-        office = new GeoPoint(locGPS.getLatitude(), locGPS.getLongitude());
+        office = new GeoPoint(-6.183329, 106.8142254);
 
         userPos = new Marker(map);
         userPos.setPosition(user);
@@ -180,37 +199,84 @@ public class OfficeCheckIn extends AppCompatActivity {
         circle.setStrokeWidth(2);
         map.getOverlays().add(circle);
 
+
+
+        this.getWorkLocations();
         BoundingBox bb = map.getBoundingBox();
+
         CacheManager cm = new CacheManager(map);
         cm.downloadAreaAsync(this, bb, 9, 19);
 //
 //        MapEventsOverlay eo = new MapEventsOverlay(this, this);
 //        map.getOverlays().add(0, eo);
-
-        this.updateButton();
-
         map.invalidate();
     }
 
-    public void updateButton(){
+    private void startTimer() {
+
+        endTime = mMillisLeft + System.currentTimeMillis();
+
+        mCountDownTimer = new CountDownTimer(mMillisLeft, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mMillisLeft = millisUntilFinished;
+                updateCountDownText();
+            }
+
+            @Override
+            public void onFinish() {
+                updateButton();
+            }
+        }.start();
+        mTimerRunning = true;
+
+    }
+
+    private void updateButton() {
+
         minDistance = -1;
-        for(int i = 1; i < points.size(); i++){
-            distance = user.distanceToAsDouble(points.get(i));
-            if(minDistance >= distance || minDistance == -1){
-                minDistance = distance;
+        distance = user.distanceToAsDouble(office);
+
+
+        if(isCheckIn) {
+            Log.d("TEST", "checin is :" + true);
+            btnCheckIn.setVisibility(View.GONE);
+            btnCheckOut.setVisibility(View.VISIBLE);
+
+            if(distance <= 100 && mMillisLeft == 0){
+                btnCheckOut.setClickable(true);
+                btnCheckIn.setAlpha(1f);
+            } else {
+                btnCheckOut.setClickable(false);
+                btnCheckIn.setAlpha(0.5f);
+            }
+        } else {
+            Log.d("TEST", "checin is :" + false);
+
+            btnCheckIn.setVisibility(View.VISIBLE);
+            btnCheckOut.setVisibility(View.GONE);
+
+            if(distance <= 100 || minDistance == -1){
+                btnCheckIn.setClickable(true);
+                btnCheckIn.setAlpha(1f);
+            } else {
+                btnCheckIn.setClickable(false);
+                btnCheckIn.setAlpha(0.5f);
             }
         }
-
-        if(minDistance <= 100){
-            clockIn.setClickable(true);
-            clockIn.setAlpha(1f);
-        }else{
-            clockIn.setClickable(false);
-            clockIn.setAlpha(0.5f);
-        }
-
-        Log.i("TEST", "distance: "+String.valueOf(minDistance));
     }
+
+
+    private void getWorkLocations() {
+
+        BoundingBox view = BoundingBox.fromGeoPoints(points);
+        GeoPoint center = new GeoPoint(view.getCenterLatitude(), view.getCenterLongitude());
+        mapController.setCenter(center);
+        mapController.zoomToSpan(view.getLatitudeSpan(), view.getLongitudeSpan());
+        map.invalidate();
+    }
+
+
 
     public void OnResume(){
         super.onResume();
@@ -275,14 +341,10 @@ public class OfficeCheckIn extends AppCompatActivity {
             Log.d("TEST", dtime.format(date));
             //remove this
             wordViewModel.insert(insert);
-
+            startTimer();
+            isCheckIn = true;
             map.invalidate();
 
-            Button checkOut = findViewById(R.id.checkOut);
-            checkOut.setVisibility(View.VISIBLE);
-
-            Button checkIn = findViewById(R.id.clockIn);
-            checkIn.setVisibility(View.GONE);
         }
     }
 
@@ -301,6 +363,8 @@ public class OfficeCheckIn extends AppCompatActivity {
     }
 
     public void checkOut(View view) {
+
+        Toast.makeText(getApplicationContext(), "Check OUt ", Toast.LENGTH_SHORT).show();
         SimpleDateFormat dtime = new SimpleDateFormat("HH:mm:ss");
         Date date = new Date();
 
@@ -311,13 +375,83 @@ public class OfficeCheckIn extends AppCompatActivity {
 
             wordViewModel.insert(insert);
 
-            Button checkOut = findViewById(R.id.checkOut);
-            checkOut.setVisibility(View.GONE);
+            isCheckIn = false;
 
-            Button checkIn = findViewById(R.id.clockIn);
-            checkIn.setVisibility(View.VISIBLE);
+            updateButton();
         }
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        if(isCheckIn) {
+           editor.putBoolean("isCheckIn", true);
+        }
+        editor.putBoolean("timerRunning", mTimerRunning);
+        editor.putLong("endTimer", endTime);
+        editor.putLong("millisLeft", mMillisLeft);
+        editor.apply();
+        Log.d("TEST", "STOPPED!!");
+        Log.d("TEST", "is check on STOP :"+ isCheckIn);
+
+        if(mCountDownTimer != null){
+            mCountDownTimer.cancel();
+        }
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        if(isCheckIn){
+            editor.putBoolean("isCheckIn", true);
+        } else {
+            isCheckIn = prefs.getBoolean("isCheckIn", false);
+        }
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("isCheckIn", isCheckIn);
+        outState.putLong("millisLeft", mMillisLeft);
+        outState.putLong("endTime", endTime);
+        outState.putBoolean("timerRunning", mTimerRunning);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mMillisLeft = savedInstanceState.getLong("millisLeft");
+        mTimerRunning = savedInstanceState.getBoolean("timerRunning");
+        isCheckIn = savedInstanceState.getBoolean("isCheckIn");
+        updateCountDownText();
+
+        if(mTimerRunning){
+            endTime = savedInstanceState.getLong("endTime");
+            mMillisLeft = endTime - System.currentTimeMillis();
+            startTimer();
+        }
+
+    }
+
+    private void updateCountDownText() {
+
+        final TextView textTimer = (TextView) findViewById(R.id.Timer);
+
+        int hour = (int) (mMillisLeft / 1000) / 60 / 60;
+        int minutes = (int) (mMillisLeft / 1000) / 60 % 60;
+        int seconds = (int) (mMillisLeft / 1000) % 60;
+
+        String settTextView = String.format(Locale.getDefault(), "%02d:%02d:%02d", hour, minutes, seconds);
+        textTimer.setText(settTextView);
+
+    }
 }

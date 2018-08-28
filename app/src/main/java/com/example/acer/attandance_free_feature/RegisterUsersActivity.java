@@ -24,9 +24,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dalvik.annotation.TestTarget;
 
 public class RegisterUsersActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String LOG = "test";
     @BindView(R.id.username) EditText username;
 
     @BindView(R.id.name) EditText name;
@@ -34,7 +36,6 @@ public class RegisterUsersActivity extends AppCompatActivity implements View.OnC
     @BindView(R.id.buttonSave) Button buttonSave;
 
     private WordViewModel wordViewModel;
-    private WelcomeHelper wh;
     private Context ctx;
     SharedPreferences sp;
 
@@ -44,17 +45,9 @@ public class RegisterUsersActivity extends AppCompatActivity implements View.OnC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        wh = new WelcomeHelper(this, WelcomeActivity.class);
-        wh.show(savedInstanceState);
         ctx = getApplicationContext();
-        sp = getSharedPreferences("PREFERENCES", MODE_PRIVATE);
-//        boolean isFirst = sp.getBoolean("firsttime", true);
-//
-//        if(!isFirst){
-//            startActivity(new Intent(RegisterUsersActivity.this, MainActivity.class));
-//        }
-
         setContentView(R.layout.register_users_activity);
+
         ButterKnife.bind(this);
 
         wordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
@@ -67,12 +60,31 @@ public class RegisterUsersActivity extends AppCompatActivity implements View.OnC
                 if(users != null){
                     if(users.size() > 0){
                         Intent intent = new Intent(ctx, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         ctx.startActivity(intent);
                         finish();
                     }
+                } else {
+
                 }
             }
         });
+
+
+
+//        WelcomeHelper wh = new WelcomeHelper(this, WelcomeActivity.class);
+//        wh.show(savedInstanceState);
+
+
+//        sp = getSharedPreferences("PREFERENCES", MODE_PRIVATE);
+//        boolean isFirst = sp.getBoolean("firsttime", true);
+//
+//        if(!isFirst){
+//            startActivity(new Intent(RegisterUsersActivity.this, MainActivity.class));
+//        }
+
+
+
     }
 
     private boolean ValidationForm() {
@@ -106,7 +118,7 @@ public class RegisterUsersActivity extends AppCompatActivity implements View.OnC
                     LoadingAsyncTask loadingAsyncTask = new LoadingAsyncTask(this, buttonSave, wordViewModel, username, name);
                     loadingAsyncTask.execute();
                     buttonSave.setEnabled(false);
-//                    startActivity(new Intent(RegisterUsersActivity.this, NavigationDrawerActivity.class));
+//                    startActivity(new Intent(RegisterUsersActivity.this, MainActivity.class));
 //                    finish();
 
                 } else {
@@ -125,10 +137,11 @@ public class RegisterUsersActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-        final SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean("firsttime", false);
-        editor.commit();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+    }
 }

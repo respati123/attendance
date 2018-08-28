@@ -31,6 +31,4 @@ public class WelcomeActivity extends com.stephentuso.welcome.WelcomeActivity {
                     .backButtonSkips(true)
                 .build();
     }
-
-
 }

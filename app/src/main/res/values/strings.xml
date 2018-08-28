@@ -15,4 +15,7 @@
     <string name="form_schedule">Schedule</string>
     <string name="title_activity_schedule_main">ScheduleMainActivity</string>
     <string name="title_activity_office_check_in">OfficeCheckIn</string>
+    <string name="title_activity_my_intro">MyIntroActivity</string>
+    <string name="Textview">TextView</string>
+    <string name="heading">Heading</string>
 </resources>

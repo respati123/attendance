@@ -1,11 +1,14 @@
 package com.example.acer.attandance_free_feature;
 
+import android.Manifest;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -52,13 +55,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        context = this;
         //find
         usernameProfile = findViewById(R.id.username_profile);
         nameProfile = findViewById(R.id.name_profile);
         imageProfile = (CircleImageView) findViewById(R.id.image_profile);
 
-
-        context = getApplicationContext();
         wvm = ViewModelProviders.of(this).get(WordViewModel.class);
 
         btnBack = (ImageView) findViewById(R.id.back_profile);
@@ -101,6 +103,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.buttonCamera:
+                final boolean CameraPermission = ActivityCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED;
+                if(!CameraPermission){
+                    finish();
+                }
+
                 Intent IntentForSelfie = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if(IntentForSelfie.resolveActivity(getPackageManager()) != null){
                     startActivityForResult(IntentForSelfie, 1);

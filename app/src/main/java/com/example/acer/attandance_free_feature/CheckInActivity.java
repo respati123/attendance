@@ -29,8 +29,6 @@ import com.example.acer.attandance_free_feature.db.entities.Absensi;
 import com.example.acer.attandance_free_feature.db.entities.Schedules;
 import com.example.acer.attandance_free_feature.db.models.WordViewModel;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.cachemanager.CacheManager;
@@ -43,15 +41,11 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polygon;
 
 import java.io.ByteArrayOutputStream;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.time.*;
 import java.util.List;
-import java.util.SimpleTimeZone;
 
 public class CheckInActivity extends AppCompatActivity implements MapEventsReceiver{
 
@@ -135,14 +129,14 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
-        clockIn = findViewById(R.id.clockIn);
+        clockIn = findViewById(R.id.checkIn);
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         locGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         locationListener = new LocationListener() {
-            private Button clockIn = findViewById(R.id.clockIn);
+            private Button clockIn = findViewById(R.id.checkIn);
 
             @Override
             public void onLocationChanged(Location location) {
@@ -390,7 +384,7 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
             Button checkOut = findViewById(R.id.checkOut);
             checkOut.setVisibility(View.VISIBLE);
 
-            Button checkIn = findViewById(R.id.clockIn);
+            Button checkIn = findViewById(R.id.checkIn);
             checkIn.setVisibility(View.GONE);
 
             mRecyclerView.setVisibility(View.GONE);
@@ -450,7 +444,7 @@ public class CheckInActivity extends AppCompatActivity implements MapEventsRecei
         Button checkOut = findViewById(R.id.checkOut);
         checkOut.setVisibility(View.GONE);
 
-        Button checkIn = findViewById(R.id.clockIn);
+        Button checkIn = findViewById(R.id.checkIn);
         checkIn.setVisibility(View.VISIBLE);
 
         map.getOverlays().remove(lastCheckIn);
