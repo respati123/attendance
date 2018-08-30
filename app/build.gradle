@@ -55,4 +55,5 @@ dependencies {
     implementation 'com.vamsi:customcalendar:1.0.0'
 
     implementation files('libs/jxl.jar')
+    implementation 'com.google.android.gms:play-services-ads:15.0.1'
 }

@@ -19,5 +19,6 @@ public class Model {
 
     public String username = "",image = "", name = "", nickname = "";
     public int id = 0;
+    public boolean isCheckIn;
 
 }
