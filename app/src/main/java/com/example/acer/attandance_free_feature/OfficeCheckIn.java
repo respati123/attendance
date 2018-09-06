@@ -1,10 +1,16 @@
 package com.example.acer.attandance_free_feature;
 
 import android.Manifest;
-import android.arch.lifecycle.Observer;
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -12,31 +18,24 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.acer.attandance_free_feature.data.Model;
-import com.example.acer.attandance_free_feature.db.entities.Absensi;
+import com.example.acer.attandance_free_feature.Services.CountDownService;
 import com.example.acer.attandance_free_feature.db.entities.AbsensiOffice;
-import com.example.acer.attandance_free_feature.db.entities.Schedules;
 import com.example.acer.attandance_free_feature.db.models.WordViewModel;
 
 import org.osmdroid.api.IMapController;
@@ -45,23 +44,20 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polygon;
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class OfficeCheckIn extends AppCompatActivity {
 
 
+    private static final String CHANNEL_3_ID = "channel3";
     private MapView map = null;
     private Location locGPS;
     private LocationManager locationManager;
@@ -88,19 +84,20 @@ public class OfficeCheckIn extends AppCompatActivity {
 
     static final int TAKE_SELFIE_REQUEST = 1;
     private WordViewModel wordViewModel;
+    private AbsensiOffice insert;
 
-    private CountDownTimer mCountDownTimer;
-    private long START_MILLIS = 60000;
-    private boolean mTimerRunning;
-    private long mMillisLeft;
+
+
+    //for countdown
+    //inner class
+    MyReceiver myReceiver;
+    IntentFilter intentFilter;
     private boolean isCheckIn;
-    private long endTime;
-    private boolean overTimeRunning;
-
-
     private Button btnCheckIn;
     private Button btnCheckOut;
     private TextView textTimer;
+    private long mMillisLeft;
+    private boolean isFirstGateCircle;
 
 
     @Override
@@ -115,6 +112,9 @@ public class OfficeCheckIn extends AppCompatActivity {
         btnCheckIn = findViewById(R.id.checkIn);
         btnCheckOut = findViewById(R.id.checkOut);
         textTimer = findViewById(R.id.Timer);
+        createNotificationChannels();
+
+//        overtime = (Chronometer) findViewById(R.id.chrometer);
 
         //Permission Check
         boolean fineLocPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
@@ -221,32 +221,20 @@ public class OfficeCheckIn extends AppCompatActivity {
         map.invalidate();
     }
 
-    private void startTimer() {
-
-        endTime = mMillisLeft + System.currentTimeMillis();
-
-        mCountDownTimer = new CountDownTimer(mMillisLeft, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                mMillisLeft = millisUntilFinished;
-                updateCountDownText();
-            }
-
-            @Override
-            public void onFinish() {
-                textTimer.setTextColor(getResources().getColor(R.color.green));
-                runOvertime();
-                updateButton();
-            }
 
 
-        }.start();
-        mTimerRunning = true;
-    }
-    private void runOvertime() {
-        Chronometer overtime = (Chronometer) findViewById(R.id.chrometer);
-        overtime.start();
-    }
+//    private void startOvertime() {
+//        overtime.setBase(SystemClock.elapsedRealtime());
+//        overtime.start();
+//        overtime.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+//            @Override
+//            public void onChronometerTick(Chronometer chronometer) {
+//                overtime = chronometer;
+//                Log.d("TEST", ""+ (SystemClock.elapsedRealtime() - overtime.getBase()));
+//            }
+//        });
+//        overTimeRunning = true;
+//    }
 
     private void updateButton() {
 
@@ -275,11 +263,36 @@ public class OfficeCheckIn extends AppCompatActivity {
             if(distance <= 100 || minDistance == -1){
                 btnCheckIn.setClickable(true);
                 btnCheckIn.setAlpha(1f);
+                if(!isFirstGateCircle){
+                    isFirstGateCircle = true;
+                    sendNotification();
+                }
             } else {
                 btnCheckIn.setClickable(false);
                 btnCheckIn.setAlpha(0.5f);
             }
         }
+    }
+
+    private void sendNotification() {
+
+        Intent intentActivity = new Intent(this, OfficeCheckIn.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intentActivity, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_3_ID)
+                .setContentTitle("ATTENDANCE")
+                .setContentText("You can check in right now!")
+                .setSmallIcon(R.drawable.ic_notif)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setVibrate(new long[] {1000, 1000, 1000, 1000, 1000})
+                .setContentIntent(pendingIntent)
+                .build();
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(2, notification);
+
     }
 
 
@@ -334,11 +347,15 @@ public class OfficeCheckIn extends AppCompatActivity {
 //        return false;
 //    }
 
-    private AbsensiOffice insert;
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == TAKE_SELFIE_REQUEST && resultCode == RESULT_OK) {
+
+            Intent intent = new Intent(this, CountDownService.class);
+            startService(intent);
+
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             isCheckIn = true;
@@ -358,8 +375,8 @@ public class OfficeCheckIn extends AppCompatActivity {
             Log.d("TEST", dtime.format(date));
             //remove this
             wordViewModel.insert(insert);
-            startTimer();
             map.invalidate();
+
 
             inputPrefs(true);
             Log.d("TEST", "selesai upload");
@@ -370,6 +387,7 @@ public class OfficeCheckIn extends AppCompatActivity {
     private void inputPrefs(boolean bool) {
         SharedPreferences preferences = getSharedPreferences("prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
         editor.putBoolean("isCheckIn", bool);
         editor.apply();
     }
@@ -393,17 +411,20 @@ public class OfficeCheckIn extends AppCompatActivity {
         SimpleDateFormat dtime = new SimpleDateFormat("HH:mm:ss");
         Date date = new Date();
 
-        if(user.distanceToAsDouble(office) <= 100){
-            insert.setOut_time(dtime.format(date));
-            insert.setCheckout_lat(user.getLatitude());
-            insert.setCheckout_lon(user.getLongitude());
+        Log.d("TEST", dtime.format(date));
 
-            wordViewModel.insert(insert);
+        insert.setOut_time(String.valueOf(dtime.format(date)));
+        insert.setCheckout_lat(user.getLatitude());
+        insert.setCheckout_lon(user.getLongitude());
 
-            isCheckIn = false;
+        wordViewModel.insert(insert);
 
-            updateButton();
-        }
+        updateButton();
+        updateCountDownText();
+
+        inputPrefs(false);
+
+        stopService(new Intent(this, CountDownService.class));
 
     }
 
@@ -414,44 +435,27 @@ public class OfficeCheckIn extends AppCompatActivity {
         Log.d("TEST", "checkin in STOPPED :" + isCheckIn );
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
         editor.putBoolean("isCheckIn", isCheckIn);
-        editor.putBoolean("timerRunning", mTimerRunning);
-        editor.putLong("endTimer", endTime);
-        editor.putLong("millisLeft", mMillisLeft);
+        editor.putBoolean("isFirstGate", isFirstGateCircle);
         editor.apply();
-
-
-        if(mCountDownTimer != null){
-            mCountDownTimer.cancel();
-        }
+        unregisterReceiver(myReceiver);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d("TEST", "STARTED");
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-
         boolean check = prefs.getBoolean("isCheckIn", false);
-        mMillisLeft = prefs.getLong("millisLeft", START_MILLIS);
-        mTimerRunning = prefs.getBoolean("timerRunning", false);
+        isFirstGateCircle = prefs.getBoolean("isFirstGate", false);
         isCheckIn = check;
-        if(!isCheckIn){
-            mTimerRunning = false;
-        } else {
-            if(mTimerRunning) {
-                endTime = prefs.getLong("endTimer", 0);
-                mMillisLeft = endTime - System.currentTimeMillis();
-
-                if (mMillisLeft < 0) {
-                    mTimerRunning = false;
-                    mMillisLeft = 0;
-                }
-            }
-            startTimer();
-        }
-        updateButton();
+        myReceiver = new MyReceiver();
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("COUNT_DOWN");
+        registerReceiver(myReceiver, intentFilter);
         updateCountDownText();
+
+
     }
 
     @Override
@@ -459,30 +463,31 @@ public class OfficeCheckIn extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         Log.d("TEST", "SAVED");
         outState.putBoolean("isCheckIn", isCheckIn);
-        outState.putLong("millisLeft", mMillisLeft);
-        outState.putLong("endTime", endTime);
-        outState.putBoolean("timerRunning", mTimerRunning);
+
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         Log.d("TEST", "RESTORE");
-        mMillisLeft = savedInstanceState.getLong("millisLeft");
-        mTimerRunning = savedInstanceState.getBoolean("timerRunning");
         isCheckIn = savedInstanceState.getBoolean("isCheckIn");
-
-        updateCountDownText();
-
-        if(mTimerRunning){
-            endTime = savedInstanceState.getLong("endTime");
-            mMillisLeft = endTime - System.currentTimeMillis();
-            startTimer();
-        }
-
     }
 
     private void updateCountDownText() {
+
+        if(mMillisLeft == 0 ){
+           if(isCheckIn){
+               textTimer.setText(R.string.check_out_text);
+               textTimer.setTextSize(18f);
+               textTimer.setTextColor(Color.RED);
+               return;
+           } else {
+               textTimer.setText(R.string.check_in_text);
+               textTimer.setTextSize(18f);
+               textTimer.setTextColor(Color.GREEN);
+               return;
+           }
+        }
 
         int hour = (int) (mMillisLeft / 1000) / 60 / 60;
         int minutes = (int) (mMillisLeft / 1000) / 60 % 60;
@@ -490,6 +495,34 @@ public class OfficeCheckIn extends AppCompatActivity {
 
         String settTextView = String.format(Locale.getDefault(), "%02d:%02d:%02d", hour, minutes, seconds);
         textTimer.setText(settTextView);
+        textTimer.setTextColor(Color.BLACK);
 
+    }
+
+    ///class receiver
+
+    public class MyReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mMillisLeft = intent.getLongExtra("millistLeft",  0);
+            Log.d("TEST", "receive :" + mMillisLeft);
+            updateButton();
+            updateCountDownText();
+
+        }
+    }
+
+    private void createNotificationChannels() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel3 = new NotificationChannel(CHANNEL_3_ID,
+                    "Channel 1",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel3.setDescription("This is Channel 1");
+
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel3);
+        }
     }
 }

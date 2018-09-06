@@ -27,6 +27,7 @@
             android:excludeFromRecents="true"
             android:label="RegisterUserActivity"
             android:noHistory="true"
+            android:autoRemoveFromRecents="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         </activity>
@@ -60,7 +61,9 @@
         <activity
             android:name=".OfficeCheckIn"
             android:label="@string/title_activity_office_check_in"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
         <activity android:name=".MyIntroActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
@@ -69,6 +72,7 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <service android:name=".Services.CountDownService" />
     </application>
 
 </manifest>
